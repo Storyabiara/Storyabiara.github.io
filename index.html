@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💖 Buku Kenangan Kita</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Dancing+Script:wght@400;600;700&family=Pinyon+Script&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --cr:#fdf8f2;--cr2:#f9f0e4;--wm:#f2e4d0;--pc:#eedfc6;
+  --gd:#c8923a;--gl:#e4ba78;--gll:#f5dfa8;
+  --br:#6b3f22;--bl:#9a6040;--bll:#c09070;
+  --rs:#bf6878;--rl:#dea0aa;--rll:#f2d0d5;
+  --mv:#9b6e88;--ink:#2a1a10;--il:#5a3820;--ill:#8a6050;
+  --pw:min(405px,88vw);
+}
+html{scroll-behavior:smooth}
+body{min-height:100vh;background:#140b05;font-family:'Cormorant Garamond',serif;overflow-x:hidden;cursor:default}
+
+/* AMBIENT */
+.amb{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);animation:orbf 9s ease-in-out infinite}
+.o1{width:600px;height:600px;background:rgba(200,146,58,.07);top:-150px;left:-150px}
+.o2{width:450px;height:450px;background:rgba(191,104,120,.06);bottom:-100px;right:-100px;animation-delay:-4s}
+.o3{width:300px;height:300px;background:rgba(155,110,136,.05);top:45%;left:55%;animation-delay:-7s}
+@keyframes orbf{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(22px,-18px) scale(1.04)}66%{transform:translate(-14px,16px) scale(.97)}}
+
+/* COVER */
+#cover{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  z-index:1000;background:#140b05;transition:opacity 1s,transform 1s}
+.cov-bg{position:absolute;inset:0;background:
+  radial-gradient(ellipse at 30% 30%,rgba(200,146,58,.14) 0%,transparent 60%),
+  radial-gradient(ellipse at 70% 70%,rgba(191,104,120,.11) 0%,transparent 60%);pointer-events:none}
+
+/* Falling petals */
+.petal{position:absolute;animation:pfall linear infinite;pointer-events:none;font-size:clamp(10px,1.8vw,18px)}
+@keyframes pfall{
+  0%{transform:translateY(-30px) rotate(0deg) translateX(0);opacity:0}
+  8%{opacity:.7}
+  92%{opacity:.4}
+  100%{transform:translateY(110vh) rotate(400deg) translateX(50px);opacity:0}
+}
+
+.cov-inner{position:relative;z-index:5;display:flex;flex-direction:column;align-items:center;gap:0;text-align:center;padding:20px}
+.cov-tag{font-size:10px;letter-spacing:5px;text-transform:uppercase;color:rgba(200,146,58,.45);margin-bottom:16px}
+.cov-main{font-family:'Pinyon Script',cursive;font-size:clamp(38px,8vw,66px);color:var(--gl);
+  line-height:1;margin-bottom:6px;text-shadow:0 0 60px rgba(200,146,58,.3);animation:tglow 3.5s ease-in-out infinite}
+@keyframes tglow{0%,100%{text-shadow:0 0 40px rgba(200,146,58,.3)}50%{text-shadow:0 0 90px rgba(200,146,58,.5),0 0 130px rgba(191,104,120,.2)}}
+.cov-sub{font-family:'Dancing Script',cursive;font-size:clamp(14px,2.8vw,20px);color:rgba(228,186,120,.65);margin-bottom:36px;font-style:italic}
+
+/* 3D BOOK */
+.book3{position:relative;width:clamp(190px,38vw,255px);height:clamp(250px,48vw,330px);
+  perspective:900px;cursor:pointer;margin:0 auto 36px;transform-style:preserve-3d}
+.book3-i{width:100%;height:100%;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.4,0,.2,1)}
+.book3:hover .book3-i{transform:rotateY(-22deg) rotateX(5deg)}
+.bf{position:absolute;inset:0;backface-visibility:hidden;
+  background:linear-gradient(160deg,#9b5a2a 0%,#6b3010 40%,#3d1a06 100%);
+  border-radius:4px 14px 14px 4px;
+  box-shadow:-8px 8px 30px rgba(0,0,0,.6),-2px 0 8px rgba(0,0,0,.4),
+    inset -3px 0 10px rgba(0,0,0,.3),inset 3px 0 6px rgba(200,146,58,.1);
+  overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:22px}
+.bf::before{content:'';position:absolute;left:19px;top:0;bottom:0;width:3px;
+  background:linear-gradient(to bottom,rgba(200,146,58,.1),rgba(200,146,58,.4),rgba(200,146,58,.1))}
+.bf::after{content:'';position:absolute;inset:8px;border:1px solid rgba(200,146,58,.18);
+  border-radius:2px 10px 10px 2px;pointer-events:none}
+.bemb{width:66px;height:66px;border:2px solid var(--gd);border-radius:50%;display:flex;
+  align-items:center;justify-content:center;font-size:28px;box-shadow:0 0 20px rgba(200,146,58,.2);position:relative}
+.bemb::before{content:'';position:absolute;inset:5px;border:1px solid rgba(200,146,58,.28);border-radius:50%}
+.bct{font-family:'Dancing Script',cursive;font-size:clamp(14px,3.2vw,18px);color:var(--gl);text-align:center;line-height:1.3}
+.bdiv{width:46px;height:1px;background:linear-gradient(to right,transparent,var(--gd),transparent)}
+.byr{font-size:10px;letter-spacing:4px;color:rgba(200,146,58,.45);text-transform:uppercase}
+
+.hint-open{font-size:13px;color:rgba(200,146,58,.5);font-style:italic;letter-spacing:1px;animation:hp 2.5s ease-in-out infinite}
+@keyframes hp{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:.9;transform:scale(1.02)}}
+
+/* APP */
+#app{display:none;flex-direction:column;align-items:center;padding:22px 10px 120px;position:relative;z-index:2}
+
+/* HEADER */
+.shead{text-align:center;margin-bottom:18px}
+.sh-ey{font-size:10px;letter-spacing:5px;text-transform:uppercase;color:rgba(200,146,58,.4);margin-bottom:3px}
+.sh-t{font-family:'Pinyon Script',cursive;font-size:clamp(30px,6.5vw,54px);color:var(--gl);
+  line-height:1;text-shadow:0 0 40px rgba(200,146,58,.22)}
+.sh-s{font-family:'Dancing Script',cursive;font-size:clamp(12px,2.2vw,16px);
+  color:rgba(191,104,120,.55);font-style:italic;margin-top:2px}
+
+/* MUSIC */
+.mp-wrap{width:100%;max-width:510px;margin-bottom:18px}
+.mp{background:rgba(255,255,255,.03);backdrop-filter:blur(20px);
+  border:1px solid rgba(200,146,58,.13);border-radius:60px;padding:9px 16px;
+  display:flex;align-items:center;gap:11px;box-shadow:0 4px 28px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.04)}
+.mpb{width:36px;height:36px;border-radius:50%;border:none;
+  background:linear-gradient(135deg,var(--gd),#a87030);color:#1a0800;
+  font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:.25s;box-shadow:0 3px 10px rgba(200,146,58,.3)}
+.mpb:hover{transform:scale(1.1);box-shadow:0 5px 16px rgba(200,146,58,.45)}
+.mpi{flex:1;min-width:0}
+.mpt{font-family:'Dancing Script',cursive;font-size:14px;color:var(--gl);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mpp{height:3px;background:rgba(255,255,255,.07);border-radius:3px;margin-top:5px;cursor:pointer;position:relative}
+.mpf{height:100%;background:linear-gradient(to right,var(--gd),var(--rs));border-radius:3px;width:0%;transition:width .6s linear}
+.mpc{display:flex;gap:5px;align-items:center;flex-shrink:0}
+.mpct{background:none;border:1px solid rgba(200,146,58,.18);color:rgba(200,146,58,.6);
+  padding:5px 9px;border-radius:20px;font-size:11px;cursor:pointer;transition:.2s;white-space:nowrap}
+.mpct:hover{background:rgba(200,146,58,.07);color:var(--gl);border-color:rgba(200,146,58,.38)}
+
+/* SPREAD */
+.spread{position:relative;display:flex;align-items:stretch;justify-content:center;
+  filter:drop-shadow(0 18px 55px rgba(0,0,0,.48))}
+.spine{width:16px;background:linear-gradient(to right,#250c03,#582808,#380f05,#250c03);
+  flex-shrink:0;position:relative;z-index:5;align-self:stretch;min-height:480px}
+.spine::before{content:'';position:absolute;top:18px;bottom:18px;left:2px;width:1px;
+  background:linear-gradient(to bottom,transparent,rgba(200,146,58,.28),transparent)}
+
+.page{width:var(--pw);min-height:480px;position:relative;overflow:hidden;flex-shrink:0}
+.pl{border-radius:10px 0 0 10px;border-right:1px solid rgba(180,140,100,.18)}
+.pr{border-radius:0 10px 10px 0}
+
+/* Texture */
+.page::before{content:'';position:absolute;inset:0;
+  background:linear-gradient(to right,rgba(180,130,80,.04) 0%,transparent 9%),
+    repeating-linear-gradient(transparent,transparent 26px,rgba(180,140,100,.045) 26px,rgba(180,140,100,.045) 27px);
+  pointer-events:none;z-index:0}
+
+/* Page colors */
+.pc{background:linear-gradient(155deg,var(--cr) 0%,var(--cr2) 100%)}
+.pw2{background:linear-gradient(155deg,var(--wm) 0%,#eadcc6 100%)}
+.pro{background:linear-gradient(155deg,#fdf0f3 0%,#f8e2e9 100%)}
+.psa{background:linear-gradient(155deg,#f0f5f1 0%,#e5ece8 100%)}
+.pgo{background:linear-gradient(155deg,#fef8ea 0%,#faf0d5 100%)}
+
+/* Fold */
+.pr::after{content:'';position:absolute;bottom:0;right:0;width:34px;height:34px;
+  background:linear-gradient(225deg,#c8c0b8 43%,transparent 44%);opacity:.3;border-top-left-radius:4px}
+
+.pgc{position:relative;z-index:1;padding:28px 24px 42px;height:100%;display:flex;flex-direction:column;gap:13px}
+.pgn{position:absolute;bottom:13px;font-size:10px;color:var(--bl);opacity:.38;letter-spacing:2px}
+.pl .pgn{right:16px}.pr .pgn{left:16px}
+
+/* Lace top border */
+.lace{position:absolute;top:0;left:0;right:0;height:7px;
+  background:repeating-linear-gradient(90deg,transparent 0,transparent 4px,rgba(200,146,58,.13) 4px,rgba(200,146,58,.13) 8px);pointer-events:none}
+/* Corner ornament */
+.co{position:absolute;font-size:14px;color:var(--gd);opacity:.18;pointer-events:none}
+.ctl{top:7px;left:9px}.ctr{top:7px;right:9px}.cbl{bottom:18px;left:9px}.cbr{bottom:18px;right:9px}
+
+/* CONTENT ELEMENTS */
+.pt{font-family:'Pinyon Script',cursive;font-size:clamp(22px,4.2vw,32px);color:var(--br);line-height:1.1;text-align:center}
+.ptd{font-family:'Dancing Script',cursive;font-size:clamp(18px,3.3vw,25px);color:var(--br);line-height:1.2;text-align:center}
+.pey{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--rs);text-align:center}
+.pdt{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gd);text-align:center}
+
+.pq{font-family:'Playfair Display',serif;font-style:italic;color:var(--ink);
+  font-size:clamp(12.5px,2.1vw,15.5px);line-height:1.8;text-align:center;position:relative;padding:6px 12px 2px}
+.pq::before{content:'\201C';font-family:'Playfair Display',serif;font-size:70px;color:var(--rll);
+  position:absolute;top:-22px;left:0;line-height:1;opacity:.8}
+.pqs{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--il);
+  font-size:13px;line-height:1.75;text-align:center;padding:0 6px}
+
+.pb2{font-size:clamp(12px,1.9vw,14px);color:var(--il);line-height:1.88;text-align:justify}
+.pb2.it{font-style:italic}
+
+.orn{display:flex;align-items:center;justify-content:center;gap:7px;flex-shrink:0}
+.orn::before,.orn::after{content:'';height:1px;width:34px;
+  background:linear-gradient(to right,transparent,rgba(200,146,58,.38),transparent)}
+.orn span{font-size:11px;color:var(--gd);letter-spacing:3px}
+.ornr::before,.ornr::after{background:linear-gradient(to right,transparent,rgba(191,104,120,.38),transparent)}
+.ornr span{color:var(--rs)}
+
+.phf{position:relative;border:5px solid white;box-shadow:0 4px 18px rgba(0,0,0,.11),0 1px 4px rgba(0,0,0,.08);
+  border-radius:2px;overflow:hidden;transform:rotate(var(--tilt,0deg));transition:.4s;flex-shrink:0;cursor:pointer}
+.phf:hover{transform:rotate(0deg) scale(1.02)!important;z-index:10}
+.phf img{width:100%;height:100%;object-fit:cover;display:block}
+.phe{width:100%;height:100%;background:linear-gradient(135deg,var(--wm),var(--pc));
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+  color:var(--bl);opacity:.45;cursor:default}
+.phe span:first-child{font-size:22px}.phe span:last-child{font-size:10px;letter-spacing:1px}
+.phc{font-family:'Dancing Script',cursive;font-size:12px;color:var(--ill);text-align:center;opacity:.72;margin-top:-7px}
+
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.pol{background:#fff;padding:5px 5px 17px;box-shadow:0 3px 9px rgba(0,0,0,.09);
+  transform:rotate(var(--tilt,0deg));transition:.35s;cursor:pointer;position:relative}
+.pol:hover{transform:rotate(0deg) scale(1.07)!important;z-index:10}
+.pol .ph{height:72px;background:linear-gradient(135deg,var(--wm),#e0cebc);overflow:hidden;
+  display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--bl);opacity:.55}
+.pol .ph img{width:100%;height:100%;object-fit:cover;opacity:1}
+.pol .pl2{font-family:'Dancing Script',cursive;font-size:9px;text-align:center;color:var(--br);margin-top:3px;padding:0 2px}
+
+.tl{display:flex;flex-direction:column;gap:0}
+.tli{display:flex;gap:7px;align-items:flex-start}
+.tld{width:8px;height:8px;border-radius:50%;background:var(--rs);flex-shrink:0;margin-top:5px;box-shadow:0 0 0 3px rgba(191,104,120,.14)}
+.tll{width:1px;background:linear-gradient(to bottom,rgba(191,104,120,.28),transparent);margin:1px 3px 1px 3px;height:17px}
+.tldt{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gd)}
+.tlt{font-size:12.5px;color:var(--il);line-height:1.65}
+
+.hl{list-style:none;display:flex;flex-direction:column;gap:4px}
+.hl li{font-size:12.5px;color:var(--il);line-height:1.65;padding-left:15px;position:relative}
+.hl li::before{content:'♥';position:absolute;left:0;color:var(--rs);font-size:9px;top:4px}
+
+.cl{list-style:none;display:flex;flex-direction:column;gap:4px}
+.cl li{font-size:12.5px;color:var(--il);line-height:1.6;padding-left:17px;position:relative}
+.cl li::before{content:'○';position:absolute;left:0;color:var(--ill);font-size:10px;top:3px}
+.cl li.dn{color:var(--rs)}.cl li.dn::before{content:'♥';color:var(--rs);font-size:9px;top:4px}
+
+.wl{list-style:none;display:flex;flex-direction:column;gap:4px}
+.wl li{font-size:12.5px;color:var(--il);line-height:1.6}
+
+/* STAMP */
+.stamp{border:2px solid var(--rs);border-radius:3px;padding:3px 9px;
+  display:inline-flex;align-items:center;font-size:8px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--rs);transform:rotate(-3deg);opacity:.55;align-self:center}
+
+/* NAV */
+.nav{display:flex;align-items:center;gap:12px;margin-top:20px;flex-wrap:wrap;justify-content:center}
+.nb{background:rgba(200,146,58,.07);border:1px solid rgba(200,146,58,.22);color:var(--gl);
+  padding:10px 20px;border-radius:50px;font-size:15px;cursor:pointer;transition:.3s;
+  display:flex;align-items:center;gap:5px;letter-spacing:.3px}
+.nb:hover:not(:disabled){background:linear-gradient(135deg,rgba(200,146,58,.14),rgba(191,104,120,.09));
+  border-color:rgba(200,146,58,.45);transform:translateY(-2px);box-shadow:0 5px 20px rgba(200,146,58,.18)}
+.nb:disabled{opacity:.22;cursor:not-allowed}
+.nc{display:flex;flex-direction:column;align-items:center;gap:7px}
+.npt{font-family:'Dancing Script',cursive;font-size:18px;color:var(--gl);opacity:.65}
+.dots{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;max-width:210px}
+.dot{width:7px;height:7px;border-radius:50%;background:rgba(200,146,58,.17);border:none;cursor:pointer;transition:.3s}
+.dot.a{background:var(--gd);transform:scale(1.4)}.dot.v{background:rgba(200,146,58,.42)}
+
+/* FEAT */
+.fb{display:flex;gap:7px;margin-top:13px;flex-wrap:wrap;justify-content:center;max-width:860px}
+.ft{background:rgba(255,255,255,.03);border:1px solid rgba(200,146,58,.13);color:rgba(200,146,58,.58);
+  padding:6px 13px;border-radius:24px;font-size:13px;cursor:pointer;transition:.25s}
+.ft:hover{background:rgba(200,146,58,.07);color:var(--gl);border-color:rgba(200,146,58,.33);transform:translateY(-1px)}
+
+/* MODAL */
+.mbg{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:500;display:flex;
+  align-items:center;justify-content:center;padding:18px;
+  opacity:0;pointer-events:none;transition:.35s;backdrop-filter:blur(8px)}
+.mbg.on{opacity:1;pointer-events:all}
+.mbox{background:linear-gradient(160deg,var(--cr),var(--wm));border-radius:18px;
+  max-width:490px;width:100%;padding:32px 28px;position:relative;
+  transform:translateY(18px) scale(.96);transition:.35s cubic-bezier(.34,1.56,.64,1);
+  max-height:88vh;overflow-y:auto;box-shadow:0 28px 70px rgba(0,0,0,.5)}
+.mbg.on .mbox{transform:translateY(0) scale(1)}
+.mx{position:absolute;top:11px;right:13px;background:none;border:none;font-size:19px;
+  cursor:pointer;color:var(--br);opacity:.38;transition:.2s;line-height:1;padding:4px}
+.mx:hover{opacity:1}
+.mttl{font-family:'Pinyon Script',cursive;font-size:34px;color:var(--br);text-align:center;margin-bottom:18px;line-height:1.1}
+
+/* TOC */
+.tsc{max-height:55vh;overflow-y:auto;display:flex;flex-direction:column;gap:4px;padding-right:4px}
+.ti{display:flex;gap:9px;align-items:center;padding:9px 11px;border-radius:9px;cursor:pointer;
+  transition:.2s;border:1px solid transparent}
+.ti:hover{background:rgba(200,146,58,.05);border-color:rgba(200,146,58,.13)}
+.ti.cur{background:rgba(200,146,58,.09);border-color:rgba(200,146,58,.28)}
+.tie{font-size:19px;flex-shrink:0}
+.tin{flex:1}.tit{font-size:14px;color:var(--br)}.tip{font-size:10px;color:var(--ill);letter-spacing:1px}
+.tic{color:var(--gd);font-size:12px}
+
+/* SONG list */
+.si{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:9px;border:1px solid rgba(107,63,34,.1);
+  cursor:pointer;transition:.2s;margin-bottom:5px}
+.si:hover{background:rgba(200,146,58,.05);border-color:rgba(200,146,58,.18)}
+.si.pl{background:rgba(200,146,58,.09);border-color:rgba(200,146,58,.32)}
+.sn{flex:1;font-size:14px;color:var(--br)}
+.spb{background:none;border:1px solid rgba(200,146,58,.28);color:var(--gd);
+  width:27px;height:27px;border-radius:50%;cursor:pointer;font-size:10px;
+  display:flex;align-items:center;justify-content:center;transition:.2s}
+.spb:hover{background:var(--gd);color:#1a0800}
+
+/* SLIDESHOW */
+.ssiw{width:100%;height:320px;border-radius:11px;overflow:hidden;background:#1a0e08;
+  display:flex;align-items:center;justify-content:center;margin-bottom:12px;position:relative}
+.ssiw img{width:100%;height:100%;object-fit:cover;border-radius:11px}
+.sse{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;opacity:.38}
+.sse span:first-child{font-size:44px}
+.sse span:last-child{font-family:'Dancing Script',cursive;font-size:17px;color:var(--gl)}
+.sscap{font-family:'Dancing Script',cursive;font-size:17px;color:var(--br);text-align:center;margin-bottom:12px}
+.ssdots{display:flex;justify-content:center;gap:5px;flex-wrap:wrap;margin-top:10px}
+.ssd{width:7px;height:7px;border-radius:50%;background:rgba(200,146,58,.2);border:none;cursor:pointer;transition:.2s}
+.ssd.a{background:var(--gd);transform:scale(1.3)}
+
+/* MEM WALL */
+.mw{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:7px;max-height:50vh;overflow-y:auto;padding:3px}
+.mt{aspect-ratio:1;border-radius:8px;overflow:hidden;cursor:pointer;transition:.25s;
+  background:var(--wm);display:flex;align-items:center;justify-content:center;font-size:20px;
+  border:2px solid white;box-shadow:0 2px 7px rgba(0,0,0,.08)}
+.mt img{width:100%;height:100%;object-fit:cover}
+.mt:hover{transform:scale(1.07)}
+
+/* LIGHTBOX */
+#lbg .mbox{background:#000;padding:0;max-width:680px;border-radius:11px;overflow:hidden}
+#lbg .mx{color:white;background:rgba(255,255,255,.14);border-radius:50%;width:31px;height:31px;
+  display:flex;align-items:center;justify-content:center;top:9px;right:9px}
+#lbimg{width:100%;max-height:75vh;object-fit:contain;display:block}
+#lbcap{padding:12px 14px;font-family:'Dancing Script',cursive;font-size:17px;color:var(--gl);text-align:center;background:#000}
+
+/* QUOTE MODAL */
+.qlist{display:flex;flex-direction:column;gap:14px;max-height:58vh;overflow-y:auto}
+.qi{padding:14px;background:rgba(200,146,58,.04);border-radius:11px;border-left:3px solid var(--gl)}
+.qi-q{font-family:'Playfair Display',serif;font-style:italic;font-size:15px;color:var(--ink);line-height:1.78;margin-bottom:5px}
+.qi-p{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gd);opacity:.65}
+
+/* TOAST */
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(70px);
+  background:rgba(20,11,5,.96);border:1px solid rgba(200,146,58,.32);color:var(--gl);
+  padding:11px 20px;border-radius:50px;font-size:14px;z-index:900;
+  transition:transform .4s cubic-bezier(.34,1.56,.64,1);pointer-events:none;
+  white-space:nowrap;backdrop-filter:blur(10px)}
+.toast.on{transform:translateX(-50%) translateY(0)}
+
+/* HEARTS */
+.fh{position:fixed;pointer-events:none;z-index:800;animation:hr var(--d,3s) ease-out forwards;font-size:var(--sz,17px)}
+@keyframes hr{0%{transform:translateY(0) scale(1) rotate(var(--r,0deg));opacity:1}100%{transform:translateY(-230px) scale(.35) rotate(var(--r2,30deg));opacity:0}}
+
+/* PAGE FLIP */
+@keyframes pflip{0%{transform:perspective(1200px) rotateY(0) scale(1);opacity:1}
+  40%{transform:perspective(1200px) rotateY(-28deg) scale(.98);opacity:.75}
+  60%{transform:perspective(1200px) rotateY(18deg) scale(.98);opacity:.75}
+  100%{transform:perspective(1200px) rotateY(0) scale(1);opacity:1}}
+.flipping .spread{animation:pflip .5s cubic-bezier(.4,0,.2,1)}
+
+/* SPECIAL HEART animation */
+@keyframes hbeat{0%,100%{transform:scale(1)}40%{transform:scale(1.08)}60%{transform:scale(.96)}}
+.hbeat{animation:hbeat 2s ease-in-out infinite}
+
+@media(max-width:660px){
+  .pr{display:none}.spine{display:none}.pl{border-radius:10px!important}
+  :root{--pw:min(360px,94vw)}
+  .mbox{padding:22px 16px}
+}
+</style>
+</head>
+<body>
+<div class="amb"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
+
+<!-- COVER -->
+<div id="cover">
+  <div class="cov-bg"></div>
+  <div id="petals"></div>
+  <div class="cov-inner">
+    <div class="cov-tag">✦ Sebuah Cerita Cinta ✦</div>
+    <div class="cov-main">Buku Kenangan Kita</div>
+    <div class="cov-sub">Setiap halaman adalah detak jantungku untukmu</div>
+    <div class="book3" onclick="openBook()">
+      <div class="book3-i">
+        <div class="bf">
+          <div class="bemb hbeat">💖</div>
+          <div class="bdiv"></div>
+          <div class="bct">Kenangan Indah<br>Yang Abadi</div>
+          <div class="bdiv"></div>
+          <div class="byr">2024 — Selamanya</div>
+        </div>
+      </div>
+    </div>
+    <div class="hint-open">✦ Klik buku untuk membuka ✦</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="shead">
+    <div class="sh-ey">✦ Our Story ✦</div>
+    <div class="sh-t">Buku Kenangan Kita</div>
+    <div class="sh-s">Setiap momen bersamamu, sebuah keajaiban yang tak tergantikan</div>
+  </div>
+
+  <div class="mp-wrap">
+    <div class="mp">
+      <button class="mpb" id="mpb" onclick="togglePlay()">▶</button>
+      <div class="mpi">
+        <div class="mpt" id="mpt">♪ Pilih lagu yang ingin kita dengarkan...</div>
+        <div class="mpp" onclick="seekA(event)"><div class="mpf" id="mpf"></div></div>
+      </div>
+      <div class="mpc">
+        <button class="mpct" onclick="toggleMute()" id="muteBtn">🔊</button>
+        <button class="mpct" onclick="openM('modal-music')">🎵</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="fw">
+    <div class="spread">
+      <div class="page pl pc" id="pl"><div class="lace"></div><div class="co ctl">❧</div><div class="co cbl">❧</div><div class="pgc" id="plc"></div><span class="pgn" id="pnl"></span></div>
+      <div class="spine"></div>
+      <div class="page pr pc" id="pr"><div class="lace"></div><div class="co ctr">❧</div><div class="co cbr">❧</div><div class="pgc" id="prc"></div><span class="pgn" id="pnr"></span></div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="nb" id="bnp" onclick="prevP()">← Kembali</button>
+    <div class="nc">
+      <div class="npt" id="npt">1 / 20</div>
+      <div class="dots" id="dots"></div>
+    </div>
+    <button class="nb" id="bnn" onclick="nextP()">Lanjut →</button>
+  </div>
+
+  <div class="fb">
+    <button class="ft" onclick="openM('modal-toc')">📚 Daftar Isi</button>
+    <button class="ft" onclick="openM('modal-gal')">🖼 Galeri</button>
+    <button class="ft" onclick="openM('modal-ss')">▶ Slideshow</button>
+    <button class="ft" onclick="openM('modal-q')">💬 Kutipan</button>
+    <button class="ft" onclick="window.print()">🖨 Cetak</button>
+    <button class="ft" onclick="shareIt()">🔗 Bagikan</button>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="mbg" id="modal-toc"><div class="mbox"><button class="mx" onclick="closeM('modal-toc')">×</button><div class="mttl">Daftar Isi</div><div class="tsc" id="tocl"></div></div></div>
+<div class="mbg" id="modal-gal"><div class="mbox"><button class="mx" onclick="closeM('modal-gal')">×</button><div class="mttl">Galeri Kenangan</div><div class="mw" id="galw"></div><p style="font-size:11px;color:var(--ill);text-align:center;margin-top:9px;font-style:italic">Klik foto untuk memperbesar 🌸</p></div></div>
+<div class="mbg" id="modal-ss"><div class="mbox" style="max-width:540px"><button class="mx" onclick="closeM('modal-ss');stopSS()">×</button><div class="mttl">Slideshow Kenangan</div><div class="ssiw" id="ssiw"><div class="sse"><span>📸</span><span>Belum ada foto</span></div></div><div class="sscap" id="sscap">Tambahkan foto melalui Admin Panel ✦</div><div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap"><button class="nb" onclick="ssPrev()">← Prev</button><button class="nb" id="ssbt" onclick="toggleSS()">▶ Play</button><button class="nb" onclick="ssNext()">Next →</button></div><div class="ssdots" id="ssdots"></div></div></div>
+<div class="mbg" id="modal-q"><div class="mbox"><button class="mx" onclick="closeM('modal-q')">×</button><div class="mttl">Kata-Kata Manis</div><div class="qlist" id="qlst"></div></div></div>
+<div class="mbg" id="modal-music"><div class="mbox"><button class="mx" onclick="closeM('modal-music')">×</button><div class="mttl">🎵 Pilih Lagu</div><div id="slist"></div></div></div>
+<div class="mbg" id="lbg"><div class="mbox"><button class="mx" onclick="closeM('lbg')">×</button><img id="lbimg" src="" alt=""><div id="lbcap"></div></div></div>
+<div class="toast" id="toast"></div>
+<audio id="aud" loop></audio>
+
+<script>
+// ============================================================
+// STORAGE KEY — harus sama persis dengan di admin-panel.html
+// ============================================================
+const STORAGE_KEY = 'buku_kenangan_shared_v1';
+
+// Baca data dari localStorage yang diisi oleh admin-panel.html
+// Otomatis — tidak perlu copy-paste apapun!
+function loadFromStorage() {
+  const def = {
+    photos: {},
+    messages: {},
+    songs: [
+      {name:'Melodi Rindu — Ambient Piano', url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'},
+      {name:'Kenangan Abadi — Soft Guitar', url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3'},
+      {name:'Cinta Kita — Instrumental',    url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3'},
+      {name:'Malam Bersamamu — Piano',      url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3'},
+    ]
+  };
+  try {
+    const metaRaw = localStorage.getItem(STORAGE_KEY + '_meta');
+    if (!metaRaw) return def;
+    const meta = JSON.parse(metaRaw);
+    if (meta.songs && meta.songs.length) def.songs = meta.songs;
+    if (meta.messages) def.messages = meta.messages;
+    (meta.photoKeys || []).forEach(k => {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY + '_pg' + k);
+        if (raw) def.photos[k] = JSON.parse(raw);
+      } catch(e) {}
+    });
+  } catch(e) { console.log('loadFromStorage error', e); }
+  return def;
+}
+
+// Data admin — dibaca langsung dari localStorage
+let ADMIN_EMBEDDED_DATA = loadFromStorage();
+
+// Dengarkan perubahan dari admin panel (jika dibuka di tab lain)
+window.addEventListener('storage', (e) => {
+  if (e.key && e.key.startsWith(STORAGE_KEY)) {
+    ADMIN_EMBEDDED_DATA = loadFromStorage();
+    songs = [...ADMIN_EMBEDDED_DATA.songs];
+    if (document.getElementById('app').style.display !== 'none') {
+      renderPage();
+      buildSongList();
+    }
+  }
+});
+
+// ============ 20 PAGES ============
+const PG=[
+  {t:'Permulaan Segalanya',e:'🌸',sub:'Awal Dari Segalanya',bg:['pc','pro'],
+    L:{tp:'cover',ey:'Bab Pertama',ti:'Permulaan Segalanya',
+      q:'Ada hari-hari yang tidak tertulis di kalender, tidak diumumkan siapapun — namun semesta tahu betul ia akan mengubah segalanya. Hari itu adalah hari pertama aku melihatmu.',
+      b:'Aku tidak pernah percaya pada kebetulan. Sampai kamu datang — bukan dari arah yang kuharapkan, bukan di waktu yang kurencanakan. Tiba-tiba saja kamu ada, dan dunia tidak pernah lagi terasa seperti dulu.',
+      ph:[0,0],phH:145},
+    R:{tp:'tl',ti:'Jejak Langkah Kita',
+      items:[
+        {d:'Awal mula',t:'Pertemuan yang tidak terduga — namun dirancang oleh semesta'},
+        {d:'Pertama kali',t:'Percakapan yang berlangsung hingga fajar tiba, tanpa terasa'},
+        {d:'Perlahan',t:'Sadar bahwa hatiku sudah punya pemilik baru tanpa memintaku'},
+        {d:'Akhirnya',t:'Memilih untuk terus berjalan ke depan — bersamamu'},
+        {d:'Sekarang',t:'Bersyukur setiap hari karena hari itu pernah terjadi'},
+      ],ph:[0,1],phH:80}},
+
+  {t:'Hari-Hari Kecil',e:'☕',sub:'Momen Sehari-hari',bg:['pw2','pc'],
+    L:{tp:'pol',ti:'Hal Kecil yang Membekas',
+      phs:[[1,0],[1,1],[1,2],[1,3]],ts:[-1.5,1.8,-2,1.2],ls:['Kopi pagi kita ☕','Jalan sore 🌅','Tawa bersama 😄','Diam yang nyaman 🌙']},
+    R:{tp:'letter',ey:'Surat Kecil Untukmu',ti:'Tentang Hal-Hal Sederhana',
+      b:'Kamu tidak perlu melakukan hal besar untuk membuatku bahagia. Cukup hadir dengan caramu yang khas — gelak tawamu yang tiba-tiba, kebiasaanmu yang konyol dan kamu tidak sadar, cara kamu mengernyitkan dahi ketika berpikir keras. Dalam kesederhanaan itu, aku menemukan satu hal yang selama ini kucari: pulang.',
+      q:'Kebahagiaanku bukan di tempat yang jauh. Ia ada tepat di sebelahmu.'}},
+
+  {t:'Saat Jauh',e:'🌙',sub:'Rindu yang Indah',bg:['psa','pc'],
+    L:{tp:'qp',ti:'Rindu Sejauh Langit',
+      qs:['Jarak bukan penghalang. Ia hanya cara semesta mengingatkanku betapa berharganya kamu di mataku.',
+         'Setiap malam aku menatap bintang yang sama, berbisik nama yang paling kusayang.',
+         'Rinduku padamu tidak bisa diukur — ia seluas langit malam yang kamu dan aku tatap bersama dari dua arah berbeda.']},
+    R:{tp:'phb',ph:[2,0],phH:155,phl:'Malam yang selalu kurindukan 🌙',
+      b:'Bahkan ketika ribuan kilometer memisahkan kita, hatiku selalu tahu arah pulangnya. Ke arahmu. Selalu ke arahmu. Setiap pesan darimu adalah obat. Setiap suaramu adalah rumah yang tiba-tiba hadir di tempat yang paling jauh sekalipun.',
+      q:'Jarak hanya bisa memisahkan tubuh. Tidak pernah bisa menyentuh hati.'}},
+
+  {t:'Petualangan Bersama',e:'🗺️',sub:'Jelajah Dunia Kita',bg:['pgo','pw2'],
+    L:{tp:'pol',ti:'Kenangan di Penjuru Dunia',
+      phs:[[3,0],[3,1],[3,2],[3,3]],ts:[-2.5,1.5,-1,2.8],ls:['Pantai kita 🌊','Puncak impian 🏔','Kota tua 🏛','Petualangan baru 🌿']},
+    R:{tp:'cl',ti:'Bucket List Kita 🗺️',
+      items:[
+        {t:'Menonton sunset dari puncak gunung berdua',dn:true},
+        {t:'Makan malam di restoran yang terlalu mahal',dn:false},
+        {t:'Road trip tanpa tujuan dan tanpa jadwal',dn:true},
+        {t:'Bermain hujan dan tidak peduli basah kuyup',dn:true},
+        {t:'Camping di bawah jutaan bintang',dn:false},
+        {t:'Belajar memasak masakan baru bersama',dn:true},
+        {t:'Menyaksikan aurora borealis berdua',dn:false},
+        {t:'Menulis surat dan benar-benar mengirimnya',dn:false},
+      ]}},
+
+  {t:'Kata Hati',e:'💬',sub:'Yang Tak Pernah Terucap',bg:['pro','pc'],
+    L:{tp:'hl',ti:'Apa yang Kucintai Darimu',
+      items:['Cara kamu tertawa — lepas, tulus, dan paling menular','Matamu yang berbicara lebih banyak dari kata manapun','Kehangatan tanganmu di hari-hari yang paling dingin','Kesabaranmu menghadapi aku di hari-hari sulitku','Senyummu di pagi hari yang selalu memulai hariku dengan baik','Caramu peduli tanpa harus selalu diucapkan','Bagaimana kamu membuatku merasa cukup, utuh, berarti']},
+    R:{tp:'phb',ph:[4,0],phH:155,phl:'Kamu, dalam cahaya terbaikmu ✨',
+      b:'Ada begitu banyak hal yang ingin kusampaikan. Tapi setiap kali kamu ada di dekatku, semua kata itu tiba-tiba lenyap. Yang tersisa hanya syukur yang tidak cukup diucapkan — bahwa aku cukup beruntung untuk mengenalmu, menyayangimu, dan dipilih olehmu.',
+      q:'Bersamamu, untuk pertama kalinya aku tahu apa rasanya merasa utuh.'}},
+
+  {t:'Hari Spesial',e:'🎂',sub:'Merayakan Kehadiranmu',bg:['pgo','pro'],
+    L:{tp:'cel',ey:'Selamat Ulang Tahun',ti:'Hari Paling Kuhargai',
+      ph:[5,0],phH:140,phl:'Hari yang tak terlupakan 🎉',
+      b:'Ulang tahunmu bukan sekadar perayaan. Ia adalah pengingat bahwa di suatu hari, kamu lahir ke dunia ini — dan itu mengubah hidup banyak orang, terutama hidupku. Terima kasih sudah ada. Terima kasih sudah memilih untuk terus ada.'},
+    R:{tp:'wl',ti:'Doa Tulusku Untukmu',
+      items:['🌟 Semoga setiap impianmu menjadi kenyataan yang indah','💪 Semoga kamu selalu kuat di setiap badai yang datang','🌈 Semoga kebahagiaan selalu berjalan di belakangmu','❤️ Semoga kamu selalu tahu betapa dicintainya dirimu','✨ Semoga tahun ini membawa hal terbaik yang belum pernah ada','🌸 Semoga hidupmu selalu dipenuhi hal-hal yang membuatmu tersenyum','🙏 Semoga Tuhan selalu memelukmu bahkan di hari yang paling berat']}},
+
+  {t:'Ketika Susah',e:'🤝',sub:'Bersama Melewati Segalanya',bg:['psa','pw2'],
+    L:{tp:'qp',ti:'Kekuatan yang Kita Miliki',
+      qs:['Aku tidak butuh dunia yang sempurna. Aku hanya butuh kamu tetap ada di sisiku ketika dunia tidak sempurna.',
+         'Setiap badai yang kita lewati bersama tidak memisahkan kita — ia hanya menyatukan kita dengan cara yang lebih dalam.',
+         'Di hari tergelapku, kamu adalah satu-satunya cahaya yang berani aku tatap.']},
+    R:{tp:'phb',ph:[6,0],phH:155,phl:'Saling menguatkan, selalu 🤝',
+      b:'Tidak setiap hari akan cerah. Tidak setiap momen akan manis. Tapi di hari-hari yang paling berat itulah aku paling bersyukur — karena kamu masih ada, karena kamu tidak pergi, karena kamu memilihku lagi dan lagi walau aku tahu itu tidak selalu mudah. Terima kasih sudah bertahan.',
+      q:'Bersamamu, aku berani menghadapi hari apapun.'}},
+
+  {t:'Momen Lucu',e:'😄',sub:'Tawa yang Menyembuhkan',bg:['pc','pw2'],
+    L:{tp:'pol',ti:'Foto-Foto Gila Kita 😂',
+      phs:[[7,0],[7,1],[7,2],[7,3]],ts:[2.2,-2.8,1.5,-1.5],ls:['Ekspresi terlucuk','Selfie gagal total','Tawa setengah gila','Pose yang memalukan']},
+    R:{tp:'hl',ti:'Hal Konyol yang Kita Lakukan',
+      items:['Nyanyi bareng lagu yang sama-sama tidak hafal liriknya','Berdebat serius soal hal yang tidak penting sama sekali','Ketawa sampai sakit perut karena lelucon yang sudah sangat basi','Foto selfie ratusan kali hanya untuk satu yang "lumayan bagus"','Nonton film berdua tapi dua-duanya ketiduran sebelum klimaks','Drama panjang soal mau makan apa — berakhir di tempat yang sama juga']}},
+
+  {t:'Impian Bersama',e:'🌠',sub:'Masa Depan yang Kita Rancang',bg:['pro','pgo'],
+    L:{tp:'drm',ey:'Tentang Masa Depan',ti:'Mimpi yang Kita Bangun',
+      b:'Setiap kali kamu berbicara tentang masa depan, matamu berbinar. Dan di saat itulah aku selalu tahu — aku ingin ada di setiap babnya. Di setiap cerita yang belum tertulis. Di setiap pagi yang belum datang. Di setiap tempat yang namanya masih mimpi.',
+      ph:[8,0],phH:138,phl:'Menatap masa depan kita 🌠'},
+    R:{tp:'cl',ti:'Rencana Indah Kita 💫',
+      items:[
+        {t:'Membangun rumah kecil yang hangat dan penuh cinta',dn:false},
+        {t:'Punya sudut membaca dengan ratusan buku',dn:false},
+        {t:'Traveling ke Eropa — Paris, Roma, Amsterdam',dn:false},
+        {t:'Adopsi kucing berbulu yang manja',dn:false},
+        {t:'Membuka usaha bersama dari passion',dn:false},
+        {t:'Menulis buku tentang perjalanan hidup kita',dn:false},
+        {t:'Tua bersama dan masih bisa tertawa seperti ini',dn:false},
+        {t:'Menjadi versi terbaik diri kita, bersama',dn:false},
+      ]}},
+
+  {t:'Terima Kasih',e:'🙏',sub:'Dari Lubuk Hati Terdalam',bg:['pw2','pc'],
+    L:{tp:'letter',ey:'Surat yang Paling Tulus',ti:'Terima Kasih, Kamu',
+      b:'Terima kasih sudah memilihku di hari-hari kamu bisa memilih siapa saja. Terima kasih sudah bersabar ketika aku tidak mudah dipahami. Terima kasih sudah ada di hari-hari aku butuhkan seseorang. Terima kasih sudah tetap memilih untuk ada. Kamu adalah jawaban atas doa yang bahkan tidak tahu cara kuucapkan.',
+      q:'Bertemu kamu adalah hal terbaik yang pernah terjadi dalam hidupku.'},
+    R:{tp:'phb',ph:[9,0],phH:155,phl:'Kamu, segalanya bagiku 💛',
+      b:'Jika hidup memberiku kesempatan untuk memulai dari awal, aku akan memilih jalan yang sama. Karena jalan itulah yang membawaku padamu. Dan itu sudah lebih dari cukup. Itu sudah lebih dari segalanya.',
+      q:'Aku mencintaimu bukan karena kamu sempurna — tapi karena kamu nyata, kamu ada, dan kamu memilihku.'}},
+
+  {t:'Bulan Madu',e:'🌹',sub:'Cinta yang Tak Pernah Pudar',bg:['pro','pw2'],
+    L:{tp:'qp',ti:'Cinta yang Selalu Baru',
+      qs:['Setiap pagi bersamamu terasa seperti hari pertama — aku selalu jatuh cinta padamu lagi, dengan alasan yang berbeda-beda.',
+         'Tidak ada kata terlalu banyak ketika menyangkut cintaku untukmu. Ia tidak punya batas.',
+         'Kamu adalah tempat paling nyaman, paling aman, paling hangat yang pernah kutemukan di seluruh dunia.']},
+    R:{tp:'pol',ti:'Momen Romantis Kita 🌹',
+      phs:[[10,0],[10,1],[10,2],[10,3]],ts:[-1.5,2,-2.2,1],ls:['Momen intim','Tatapan makna','Berdua saja','Cinta kita']}},
+
+  {t:'Keluarga Kecil',e:'🏠',sub:'Rumah adalah Di Sisimu',bg:['pc','psa'],
+    L:{tp:'phb',ph:[11,0],phH:160,phl:'Rumah kita 🏠',
+      b:'Rumah bukan sekadar bangunan. Ia adalah perasaan yang datang ketika kamu ada di dekatku. Ketika tawamu memenuhi ruangan. Ketika tanganmu menggenggamku. Ketika diam kita berbicara lebih dari kata-kata. Itu adalah rumah. Dan aku tidak ingin pulang ke tempat lain.',
+      q:'Di manapun kamu berada, di situlah aku ingin selalu kembali.'},
+    R:{tp:'hl',ti:'Hal yang Membuatku Merasa di Rumah',
+      items:['Bunyi langkahmu di pagi hari yang membangunkanku dengan lembut','Aroma masakan yang kamu buat dengan tangan yang penuh kasih','Cara kamu memanggil namaku — seperti aku adalah satu-satunya','Pelukan yang membuatku rasa semua masalah bisa menunggu sebentar','Malam-malam yang kita habiskan hanya dengan bercerita hal kecil','Rasa aman yang datang begitu saja ketika kamu ada']}},
+
+  {t:'Momen Favorit',e:'⭐',sub:'Yang Selalu Kuingat',bg:['pgo','pc'],
+    L:{tp:'pol',ti:'Momen Tak Terlupakan ⭐',
+      phs:[[12,0],[12,1],[12,2],[12,3]],ts:[-2,1.5,-1.5,2.5],ls:['Momen terbaik 1','Momen terbaik 2','Momen terbaik 3','Momen terbaik 4']},
+    R:{tp:'letter',ey:'Kenangan Abadi',ti:'Yang Akan Selalu Kuingat',
+      b:'Di antara semua foto yang tersimpan, di antara semua momen yang pernah kita jalani — ada momen-momen yang tidak butuh dokumentasi. Ia terukir di tempat yang lebih dalam dari memori. Di tempat di mana perasaan hidup selamanya. Momen ketika kamu benar-benar hadir untukku. Sepenuhnya.',
+      q:'Ingatanku tentangmu adalah rumah yang tidak pernah dingin.'}},
+
+  {t:'Perjalanan Jauh',e:'✈️',sub:'Bersama ke Ujung Dunia',bg:['psa','pw2'],
+    L:{tp:'phb',ph:[13,0],phH:155,phl:'Petualangan kita ✈️',
+      b:'Ada keajaiban tersendiri ketika kita berdua berada di tempat yang tidak ada yang mengenal kita. Di mana kita bebas tertawa sekeras apapun. Bebas menjadi diri sendiri sepenuhnya. Dan di setiap tempat asing yang kita kunjungi, hal yang paling tidak asing selalu sama — kamu di sebelahku.',
+      q:'Dengan kamu, tempat manapun terasa seperti petualangan yang paling kutunggu.'},
+    R:{tp:'pol',ti:'Jejak Perjalanan Kita ✈️',
+      phs:[[13,1],[13,2],[13,3],[13,0]],ts:[1.5,-2,2.5,-1.5],ls:['Destinasi 1','Destinasi 2','Destinasi 3','Favorit kami']}},
+
+  {t:'Ulang Tahun',e:'🎉',sub:'Merayakan Kamu',bg:['pro','pgo'],
+    L:{tp:'cel',ey:'Happy Birthday, My Love',ti:'Selamat Ulang Tahun',
+      ph:[14,0],phH:148,phl:'Hari spesialmu 🎉',
+      b:'Kamu lahir ke dunia ini adalah keajaiban terbesar yang pernah terjadi — setidaknya bagiku. Setiap kali hari ini datang, hatiku penuh dengan satu hal saja: rasa syukur yang tidak cukup diucapkan bahwa kamu pernah lahir, dan bahwa hidupmu dan hidupku akhirnya bertemu.'},
+    R:{tp:'qp',ti:'Untukmu, di Hari Spesialmu',
+      qs:['Kamu bukan hanya bertambah usia — kamu bertambah dalam, bertambah indah, bertambah berarti di hatiku.',
+         'Setiap cerita yang kamu bawa hanya membuatku semakin kagum pada seberapa kuat dan indahnya dirimu.',
+         'Di hari ini dan setiap hari lainnya, aku bersyukur kamu ada di dunia yang sama denganku.']}},
+
+  {t:'Malam Bintang',e:'🌌',sub:'Di Bawah Langit yang Sama',bg:['psa','pc'],
+    L:{tp:'phb',ph:[15,0],phH:160,phl:'Malam paling indah 🌌',
+      b:'Ada malam-malam ketika segalanya terasa terlalu berat dan terlalu sunyi. Lalu aku menatap langit, dan tiba-tiba mengingatmu — di manapun kamu berada, kita menatap bintang yang sama. Dan entah kenapa, berat itu sedikit berkurang. Karena semesta yang sama sedang menjaga kita berdua.',
+      q:'Kita boleh berjauhan — selama bintang yang sama masih menaungi kita.'},
+    R:{tp:'qp',ti:'Berbisik di Bawah Bintang',
+      qs:['Di bawah bintang yang sama, aku selalu berbisik nama yang membuatku hangat.',
+         'Langit malam mengajariku satu hal: yang paling indah tidak perlu banyak bicara.',
+         'Bersama kamu, bahkan diam pun terasa seperti percakapan yang paling bermakna sepanjang hidupku.']}},
+
+  {t:'Hujan Bersamamu',e:'🌧️',sub:'Petrichor dan Kamu',bg:['pw2','psa'],
+    L:{tp:'letter',ey:'Di Hari Hujan',ti:'Hujan yang Paling Indah',
+      b:'Aku tidak pernah menyukai hujan — sampai aku melewatinya bersamamu. Tiba-tiba hujan terasa seperti alasan untuk berdiam lebih lama, untuk berbicara lebih dalam, untuk merasakan kedekatan yang tidak bisa dijelaskan. Kini setiap kali hujan turun, hal pertama yang kulakukan adalah memikirkanmu.',
+      q:'Kini setiap hujan adalah caraku merindukan momen itu — momen ketika kita tidak terburu-buru.'},
+    R:{tp:'phb',ph:[16,0],phH:160,phl:'Hujan yang paling kurindukan 🌧️',
+      b:'Petrichor — bau tanah setelah hujan pertama. Sekarang aroma itu selalu membawa satu nama ke benakku. Kamu. Pada sore hari kita terjebak hujan dan akhirnya memilih untuk tidak bergegas. Pada percakapan yang terasa lebih jujur dari biasanya. Pada kedekatan yang hanya hadir ketika langit menangis.',
+      q:'Di antara semua momen kita, ada yang hanya bisa diceritakan oleh hujan.'}},
+
+  {t:'Akhir Minggu',e:'🌻',sub:'Hari-Hari Santai Kita',bg:['pgo','pw2'],
+    L:{tp:'pol',ti:'Weekend Favorit Kita 🌻',
+      phs:[[17,0],[17,1],[17,2],[17,3]],ts:[-1.8,2,-2,1.5],ls:['Pagi santai','Jalan-jalan sore','Makan enak','Berdua saja']},
+    R:{tp:'hl',ti:'Rutinitas yang Kurindukan',
+      items:['Bangun terlambat tanpa satu pun rasa bersalah','Sarapan pelan-pelan sambil bercerita apapun yang terlintas','Jalan kaki tanpa tujuan yang jelas dan tanpa batas waktu','Duduk diam berdua sambil menikmati kopi yang mulai dingin','Menonton film yang sama untuk kesekian kalinya','Tertawa soal hal yang bagi orang lain tidak lucu sama sekali','Tidur siang yang tidak direncanakan — dan itu menjadi momen terbaik hari itu']}},
+
+  {t:'Janji Kita',e:'💍',sub:'Komitmen yang Abadi',bg:['pro','pc'],
+    L:{tp:'qp',ti:'Janji-Janji yang Kupilih',
+      qs:['Aku berjanji untuk selalu memilihmu — bukan karena terpaksa, tapi karena tidak ada pilihan lain yang lebih kuinginkan.',
+         'Aku berjanji untuk mencintaimu di hari mudah dan di hari sulit. Keduanya. Tanpa pengecualian.',
+         'Aku berjanji untuk terus tumbuh bersamamu — bukan hanya ada di sampingmu, tapi benar-benar bersamamu.']},
+    R:{tp:'phb',ph:[18,0],phH:160,phl:'Janji kita, selamanya 💍',
+      b:'Janji bukan sekadar kata-kata di momen istimewa. Janji adalah pilihan yang kita buat setiap hari — untuk hadir, untuk peduli, untuk tidak menyerah bahkan ketika semuanya terasa berat. Dan aku memilihmu. Hari ini. Dan seterusnya. Tanpa syarat.',
+      q:'Bersamamu, aku ingin membangun sesuatu yang bertahan lebih lama dari apapun di dunia ini.'}},
+
+  {t:'Selamanya',e:'♾️',sub:'Hingga Akhir Cerita',bg:['pw2','pro'],
+    L:{tp:'letter',ey:'Penutup yang Bukan Akhir',ti:'Untuk Selamanya, Kamu',
+      b:'Buku ini mungkin punya halaman terakhir. Tapi cerita kita tidak pernah benar-benar berakhir. Setiap hari adalah halaman baru — dengan tinta yang lebih kaya, dengan warna yang lebih berani, dengan cinta yang terus bertumbuh melampaui apa yang bisa dituliskan di sini, di mana saja, oleh siapapun.\n\nDan jika suatu hari nanti kamu membaca ini saat kita sudah tua — ketahuilah: aku masih akan memilihmu. Lagi dan lagi. Tanpa ragu sedetikpun.',
+      q:'Ini bukan tamat. Ini hanya jeda sebelum bab selanjutnya yang lebih indah dari yang kita bayangkan.'},
+    R:{tp:'pol',ti:'Kenangan Terindah Kita ♾️',
+      phs:[[19,0],[19,1],[19,2],[19,3]],ts:[-1.5,2.5,-2,1],ls:['Awal kita 🌱','Tawa kita 😂','Impian kita 🌠','Selamanya ♾️']}},
+];
+
+const QUOTES=[
+  {q:'Ada hari-hari yang tidak tertulis di kalender — namun semesta tahu betul ia akan mengubah segalanya. Hari itu adalah hari pertama aku melihatmu.',p:'Permulaan'},
+  {q:'Dalam kesederhanaanmulah aku selalu menemukan satu hal yang selama ini kucari: pulang.',p:'Hari-Hari Kecil'},
+  {q:'Jarak hanya bisa memisahkan tubuh. Tidak pernah bisa menyentuh hati.',p:'Saat Jauh'},
+  {q:'Bertemu kamu adalah hal terbaik yang pernah terjadi dalam hidupku.',p:'Terima Kasih'},
+  {q:'Aku mencintaimu bukan karena kamu sempurna — tapi karena kamu nyata, kamu ada, dan kamu memilihku.',p:'Terima Kasih'},
+  {q:'Bersamamu, untuk pertama kalinya aku tahu apa rasanya merasa utuh.',p:'Kata Hati'},
+  {q:'Kamu adalah tempat paling nyaman, paling aman, paling hangat yang pernah kutemukan.',p:'Bulan Madu'},
+  {q:'Di manapun kamu berada, di situlah aku ingin selalu kembali.',p:'Keluarga Kecil'},
+  {q:'Bersama kamu, bahkan diam pun terasa seperti percakapan paling bermakna sepanjang hidupku.',p:'Malam Bintang'},
+  {q:'Aku berjanji untuk mencintaimu di hari mudah dan di hari sulit. Keduanya. Tanpa pengecualian.',p:'Janji Kita'},
+  {q:'Bersamamu, aku ingin membangun sesuatu yang bertahan lebih lama dari apapun di dunia ini.',p:'Janji Kita'},
+  {q:'Ini bukan tamat. Ini hanya jeda sebelum bab selanjutnya yang lebih indah dari yang kita bayangkan.',p:'Selamanya'},
+  {q:'Di antara semua momen kita, ada yang hanya bisa diceritakan oleh hujan.',p:'Hujan Bersamamu'},
+  {q:'Jarak bukan penghalang. Ia hanya cara semesta mengingatkanku betapa berharganya kamu.',p:'Saat Jauh'},
+  {q:'Ingatanku tentangmu adalah rumah yang tidak pernah dingin.',p:'Momen Favorit'},
+];
+
+// STATE
+let curP=0,tot=PG.length,vis=new Set([0]),isPlay=false,curSong=null;
+let songs=[...ADMIN_EMBEDDED_DATA.songs];
+let ssI=0,ssT=null;
+const aud=document.getElementById('aud');
+
+// PARTICLES + PETALS
+function initPetals(){
+  const c=document.getElementById('petals');
+  const em=['🌸','🌹','✨','🍂','💫','🌺','🌷','❤️'];
+  for(let i=0;i<20;i++){
+    const el=document.createElement('span');el.className='petal';
+    el.textContent=em[i%em.length];
+    el.style.left=(Math.random()*100)+'vw';
+    el.style.animationDuration=(9+Math.random()*12)+'s';
+    el.style.animationDelay=(Math.random()*12)+'s';
+    c.appendChild(el);
+  }
+}
+
+function openBook(){
+  const cv=document.getElementById('cover');
+  cv.style.opacity='0';cv.style.transform='scale(1.06)';
+  setTimeout(()=>{
+    cv.style.display='none';
+    const a=document.getElementById('app');a.style.display='flex';
+    renderPage();buildDots();buildTOC();buildSongList();buildQuotes();
+  },900);
+}
+
+// RENDER
+function renderPage(){
+  const pg=PG[curP];
+  const fw=document.getElementById('fw');fw.classList.remove('flipping');void fw.offsetWidth;fw.classList.add('flipping');
+  const pl=document.getElementById('pl'),pr=document.getElementById('pr');
+  pl.className=`page pl ${pg.bg[0]}`;pr.className=`page pr ${pg.bg[1]}`;
+  pl.innerHTML=`<div class="lace"></div><div class="co ctl">❧</div><div class="co cbl">❧</div><div class="pgc" id="plc"></div><span class="pgn" id="pnl"></span>`;
+  pr.innerHTML=`<div class="lace"></div><div class="co ctr">❧</div><div class="co cbr">❧</div><div class="pgc" id="prc"></div><span class="pgn" id="pnr"></span>`;
+  buildSide('plc',pg.L);buildSide('prc',pg.R);
+  document.getElementById('pnl').textContent=curP*2+1;
+  document.getElementById('pnr').textContent=curP*2+2;
+  document.getElementById('npt').textContent=`${curP+1} / ${tot}`;
+  updDots();updNav();
+}
+
+function buildSide(id,d){
+  if(!d)return;
+  const el=document.getElementById(id);if(!el)return;
+  const pd=ADMIN_EMBEDDED_DATA.photos[curP]||[];
+  const msg=ADMIN_EMBEDDED_DATA.messages[curP];
+
+  const phHtml=(ref,h,lbl)=>{
+    const[,si]=ref;const p=pd[si];
+    const tilt=(si%2===0?-1.5:1.5);
+    if(p&&p.src)return`<div class="phf" style="height:${h}px;--tilt:${tilt}deg" onclick="openLB('${es(p.src)}','${es(p.caption||lbl||'')}')"><img src="${p.src}" alt=""></div>${(p.caption||lbl)?`<div class="phc">${p.caption||lbl}</div>`:''}`;
+    return`<div class="phf" style="height:${h}px;--tilt:${tilt}deg;cursor:default"><div class="phe"><span>📷</span><span>Belum ada foto</span></div></div>`;
+  };
+
+  const polHtml=(ref,tilt,lbl)=>{
+    const[,si]=ref;const p=pd[si];
+    const cap=p&&p.caption?p.caption:lbl;
+    if(p&&p.src)return`<div class="pol" style="--tilt:${tilt}deg" onclick="openLB('${es(p.src)}','${es(cap)}')"><div class="ph"><img src="${p.src}" alt=""></div><div class="pl2">${cap}</div></div>`;
+    return`<div class="pol" style="--tilt:${tilt}deg;cursor:default"><div class="ph">📷</div><div class="pl2">${lbl}</div></div>`;
+  };
+
+  let h='';
+  switch(d.tp){
+    case'cover':
+      h=`<div class="pey">${d.ey}</div><div class="pdt">${PG[curP].sub}</div>
+        <div class="pt">${d.ti}</div>
+        ${phHtml(d.ph,d.phH,'')}
+        <div class="pq">${d.q}</div>
+        <div class="pb2">${msg||d.b}</div>`;break;
+    case'tl':
+      h=`<div class="ptd">${d.ti}</div><div class="orn ornr"><span>✦ ♥ ✦</span></div>
+        ${phHtml(d.ph,d.phH,'')}
+        <div class="tl">${d.items.map((it,i)=>`
+          <div class="tli"><div><div class="tld"></div>${i<d.items.length-1?'<div class="tll"></div>':''}</div>
+          <div style="padding-bottom:7px"><div class="tldt">${it.d}</div><div class="tlt">${it.t}</div></div></div>`).join('')}</div>`;break;
+    case'pol':
+      h=`<div class="ptd">${d.ti}</div><div class="orn"><span>✦</span></div>
+        <div class="pgrid">${d.phs.map((r,i)=>polHtml(r,d.ts[i],d.ls[i])).join('')}</div>`;break;
+    case'letter':
+      h=`<div class="pey">${d.ey||'✦ Surat Untukmu ✦'}</div>
+        <div class="ptd">${d.ti}</div><div class="orn ornr"><span>♥</span></div>
+        <div class="pb2 it">${msg||d.b}</div>
+        ${d.q?`<div class="pqs">"${d.q}"</div>`:''}`;break;
+    case'qp':
+      h=`<div class="ptd">${d.ti}</div><div class="orn"><span>${PG[curP].e}</span></div>
+        ${d.qs.map((q,i)=>`<div class="pq${i>0?' style="font-size:13px"':''}">${q}</div>${i<d.qs.length-1?'<div class="orn ornr"><span>·</span></div>':''}`).join('')}`;break;
+    case'phb':
+      h=`${phHtml(d.ph,d.phH,d.phl)}
+        ${d.phl&&!(pd[d.ph[1]]&&pd[d.ph[1]].caption)?`<div class="phc">${d.phl}</div>`:''}
+        <div class="pb2">${msg||d.b}</div>
+        ${d.q?`<div class="pqs">"${d.q}"</div>`:''}`;break;
+    case'hl':
+      h=`<div class="ptd">${d.ti}</div><div class="orn ornr"><span>♥</span></div>
+        <ul class="hl">${d.items.map(i=>`<li>${i}</li>`).join('')}</ul>`;break;
+    case'cl':
+      h=`<div class="ptd">${d.ti}</div><div class="orn"><span>✦</span></div>
+        <ul class="cl">${d.items.map(i=>`<li class="${i.dn?'dn':''}">${i.t}</li>`).join('')}</ul>`;break;
+    case'cel':
+      h=`<div class="pey">${d.ey}</div><div class="pt">${d.ti}</div>
+        ${phHtml(d.ph,d.phH,d.phl)}${d.phl?`<div class="phc">${d.phl}</div>`:''}
+        <div class="pb2">${msg||d.b}</div>`;break;
+    case'wl':
+      h=`<div class="ptd">${d.ti}</div><div class="orn ornr"><span>🙏</span></div>
+        <ul class="wl">${d.items.map(i=>`<li>${i}</li>`).join('')}</ul>`;break;
+    case'drm':
+      h=`<div class="pey">${d.ey}</div><div class="pt">${d.ti}</div>
+        ${phHtml(d.ph,d.phH,d.phl)}${d.phl?`<div class="phc">${d.phl}</div>`:''}
+        <div class="pb2">${msg||d.b}</div>`;break;
+    default:h=`<div class="pb2">${JSON.stringify(d)}</div>`;
+  }
+  el.innerHTML=h;
+}
+
+function es(s){return(s||'').replace(/'/g,"&#39;").replace(/"/g,'&quot;');}
+
+// NAV
+function prevP(){if(curP>0){curP--;vis.add(curP);renderPage();hearts();}}
+function nextP(){if(curP<tot-1){curP++;vis.add(curP);renderPage();hearts();}}
+function goP(i){curP=i;vis.add(i);renderPage();closeM('modal-toc');}
+function updNav(){
+  document.getElementById('bnp').disabled=curP===0;
+  document.getElementById('bnn').disabled=curP===tot-1;
+}
+
+// DOTS
+function buildDots(){
+  document.getElementById('dots').innerHTML=PG.map((_,i)=>`<button class="dot" onclick="goP(${i})" title="${PG[i].t}"></button>`).join('');
+}
+function updDots(){
+  document.querySelectorAll('.dot').forEach((d,i)=>{
+    d.classList.toggle('a',i===curP);d.classList.toggle('v',!d.classList.contains('a')&&vis.has(i));
+  });
+}
+
+// MODAL
+function openM(id){
+  if(id==='modal-gal')buildGal();
+  if(id==='modal-ss')initSS();
+  document.getElementById(id).classList.add('on');
+}
+function closeM(id){document.getElementById(id).classList.remove('on');}
+document.querySelectorAll('.mbg').forEach(m=>{
+  m.addEventListener('click',e=>{if(e.target===m){m.classList.remove('on');stopSS();}});
+});
+
+// TOC
+function buildTOC(){
+  document.getElementById('tocl').innerHTML=PG.map((p,i)=>`
+    <div class="ti${i===curP?' cur':''}" onclick="goP(${i})">
+      <span class="tie">${p.e}</span>
+      <div class="tin"><div class="tit">${p.t}</div><div class="tip">${p.sub} · Hal.${i*2+1}–${i*2+2}</div></div>
+      ${vis.has(i)?'<span class="tic">✓</span>':''}
+    </div>`).join('');
+}
+
+// GALLERY
+function buildGal(){
+  const g=document.getElementById('galw');
+  let h='',c=0;
+  Object.entries(ADMIN_EMBEDDED_DATA.photos).forEach(([pi,arr])=>{
+    (arr||[]).forEach(p=>{if(p&&p.src){h+=`<div class="mt" onclick="openLB('${es(p.src)}','${es(p.caption||'')}')"><img src="${p.src}" alt="${p.caption||''}"></div>`;c++;}});
+  });
+  g.innerHTML=c?h:`<div style="grid-column:1/-1;text-align:center;padding:28px;color:var(--bl);font-family:'Dancing Script';font-size:18px;opacity:.55">Belum ada foto... Gunakan Admin Panel untuk menambahkan 📸</div>`;
+}
+
+// QUOTES
+function buildQuotes(){
+  document.getElementById('qlst').innerHTML=QUOTES.map(q=>`
+    <div class="qi">
+      <div class="qi-q">"${q.q}"</div>
+      <div class="qi-p">— ${q.p}</div>
+    </div>`).join('');
+}
+
+// LIGHTBOX
+function openLB(src,cap){
+  if(!src)return;
+  document.getElementById('lbimg').src=src;
+  document.getElementById('lbcap').textContent=cap||'';
+  openM('lbg');
+}
+
+// SLIDESHOW
+function allPhotos(){
+  let all=[];
+  Object.entries(ADMIN_EMBEDDED_DATA.photos).forEach(([pi,arr])=>{
+    (arr||[]).forEach(p=>{if(p&&p.src)all.push({...p,pn:PG[pi]?.t||''});});
+  });
+  return all;
+}
+
+function initSS(){
+  const ph=allPhotos();
+  if(!ph.length){
+    document.getElementById('ssiw').innerHTML=`<div class="sse"><span>📸</span><span>Belum ada foto</span></div>`;
+    document.getElementById('sscap').textContent='Tambahkan foto melalui Admin Panel ✦';
+    return;
+  }
+  ssI=Math.max(0,Math.min(ssI,ph.length-1));
+  showSlide(ph,ssI);
+  buildSSDots(ph);
+}
+
+function showSlide(ph,i){
+  const p=ph[i];
+  document.getElementById('ssiw').innerHTML=`<img src="${p.src}" alt="">`;
+  document.getElementById('sscap').textContent=p.caption||p.pn||'';
+  document.querySelectorAll('.ssd').forEach((d,j)=>d.classList.toggle('a',j===i));
+}
+
+function buildSSDots(ph){
+  document.getElementById('ssdots').innerHTML=ph.map((_,i)=>`<button class="ssd${i===ssI?' a':''}" onclick="goSS(${i})"></button>`).join('');
+}
+
+function goSS(i){ssI=i;const p=allPhotos();if(p.length)showSlide(p,ssI);}
+function ssNext(){const p=allPhotos();if(!p.length)return;ssI=(ssI+1)%p.length;showSlide(p,ssI);buildSSDots(p);}
+function ssPrev(){const p=allPhotos();if(!p.length)return;ssI=(ssI-1+p.length)%p.length;showSlide(p,ssI);buildSSDots(p);}
+function toggleSS(){
+  const b=document.getElementById('ssbt');
+  if(ssT){stopSS();}else{ssT=setInterval(ssNext,3200);b.textContent='⏸ Pause';}
+}
+function stopSS(){if(ssT){clearInterval(ssT);ssT=null;}const b=document.getElementById('ssbt');if(b)b.textContent='▶ Play';}
+
+// MUSIC
+function buildSongList(){
+  document.getElementById('slist').innerHTML=songs.map((s,i)=>`
+    <div class="si${curSong===i?' pl':''}">
+      <span style="font-size:17px">🎵</span>
+      <span class="sn">${s.name}</span>
+      <button class="spb" onclick="playSong(${i})">${curSong===i&&isPlay?'⏸':'▶'}</button>
+    </div>`).join('');
+}
+
+function playSong(i){
+  if(curSong===i&&isPlay){aud.pause();isPlay=false;document.getElementById('mpb').textContent='▶';}
+  else{
+    curSong=i;aud.src=songs[i].url;
+    aud.play().catch(()=>toast('⚠ Tidak bisa memutar lagu ini'));
+    isPlay=true;
+    document.getElementById('mpb').textContent='⏸';
+    document.getElementById('mpt').textContent='♪ '+songs[i].name;
+  }
+  buildSongList();closeM('modal-music');
+}
+
+function togglePlay(){
+  if(curSong===null&&songs.length){playSong(0);return;}
+  if(isPlay){aud.pause();isPlay=false;document.getElementById('mpb').textContent='▶';}
+  else{aud.play().catch(()=>{});isPlay=true;document.getElementById('mpb').textContent='⏸';}
+}
+
+function toggleMute(){aud.muted=!aud.muted;document.getElementById('muteBtn').textContent=aud.muted?'🔇':'🔊';}
+
+function seekA(e){
+  const r=e.currentTarget.getBoundingClientRect();
+  if(aud.duration)aud.currentTime=((e.clientX-r.left)/r.width)*aud.duration;
+}
+
+aud.addEventListener('timeupdate',()=>{
+  if(aud.duration)document.getElementById('mpf').style.width=(aud.currentTime/aud.duration*100)+'%';
+});
+
+// HEARTS
+function hearts(){
+  const em=['❤️','💕','💖','🌸','✨','💗','🌹'];
+  for(let i=0;i<4;i++){
+    setTimeout(()=>{
+      const el=document.createElement('div');el.className='fh';
+      el.textContent=em[Math.floor(Math.random()*em.length)];
+      el.style.setProperty('--d',(2.5+Math.random())+'s');
+      el.style.setProperty('--sz',(13+Math.random()*11)+'px');
+      el.style.setProperty('--r',(Math.random()*18-9)+'deg');
+      el.style.setProperty('--r2',(Math.random()*36-18)+'deg');
+      el.style.left=(14+Math.random()*72)+'vw';
+      el.style.bottom='90px';
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(),4000);
+    },i*140);
+  }
+}
+
+function shareIt(){
+  navigator.clipboard.writeText(location.href).then(()=>toast('✓ Link berhasil disalin!')).catch(()=>toast(location.href));
+}
+
+// TOAST
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('on');
+  setTimeout(()=>t.classList.remove('on'),3200);
+}
+
+// KEYBOARD + SWIPE
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
+  if(e.key==='ArrowRight'||e.key===' ')nextP();
+  if(e.key==='ArrowLeft')prevP();
+  if(e.key==='Escape'){document.querySelectorAll('.mbg.on').forEach(m=>m.classList.remove('on'));stopSS();}
+});
+let tx=0;
+document.addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>46){dx<0?nextP():prevP();}},{passive:true});
+
+initPetals();buildQuotes();
+</script>
+</body>
+</html>
