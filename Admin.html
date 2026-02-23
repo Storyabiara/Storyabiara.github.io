@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔐 Admin Panel — Buku Kenangan</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Cormorant+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0d0a0f;--panel:#16111c;--card:#1d1428;
+  --bd:rgba(180,120,220,.18);--gold:#d4a843;--gl:#f0cc80;
+  --rose:#d4607a;--pur:#9b6ecf;--pl:#c4a0f0;
+  --txt:#e8ddf0;--dim:rgba(232,221,240,.5);--grn:#6dbf8a;
+}
+body{background:var(--bg);font-family:'Cormorant Garamond',serif;min-height:100vh;color:var(--txt);
+  background-image:radial-gradient(ellipse at 15% 0%,rgba(155,110,207,.12) 0%,transparent 50%),
+  radial-gradient(ellipse at 85% 100%,rgba(212,96,122,.09) 0%,transparent 50%)}
+
+#login{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:999;background:var(--bg)}
+.lcard{background:var(--panel);border:1px solid var(--bd);border-radius:22px;padding:44px 36px;
+  width:min(400px,92vw);display:flex;flex-direction:column;align-items:center;gap:20px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.lcard h1{font-family:'Dancing Script',cursive;font-size:28px;color:var(--gold);text-align:center;line-height:1.2}
+.lsub{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--dim);text-align:center}
+.linput{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:50px;
+  padding:13px 20px 13px 46px;font-size:16px;color:var(--txt);outline:none;transition:.3s;letter-spacing:4px}
+.linput:focus{border-color:var(--pur);box-shadow:0 0 0 3px rgba(155,110,207,.15)}
+.liw{width:100%;position:relative}
+.liw span{position:absolute;left:15px;top:50%;transform:translateY(-50%);font-size:17px}
+.lbtn{width:100%;padding:13px;background:linear-gradient(135deg,var(--pur),var(--rose));border:none;
+  border-radius:50px;font-family:'Dancing Script',cursive;font-size:20px;color:#fff;cursor:pointer;transition:.3s}
+.lbtn:hover{transform:translateY(-2px)}
+.lerr{color:var(--rose);font-size:13px;text-align:center;min-height:18px}
+.lfl{font-size:52px;animation:bob 3s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+#app{display:none}
+.hdr{background:var(--panel);border-bottom:1px solid var(--bd);padding:12px 18px;
+  display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;
+  backdrop-filter:blur(12px);gap:10px;flex-wrap:wrap}
+.hdr-logo{font-family:'Dancing Script',cursive;font-size:20px;color:var(--gold);display:flex;align-items:center;gap:8px;flex-shrink:0}
+.badge{background:linear-gradient(135deg,var(--pur),var(--rose));color:#fff;font-size:9px;letter-spacing:2px;padding:3px 8px;border-radius:20px;text-transform:uppercase}
+.hdr-r{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.hbtn{background:rgba(155,110,207,.1);border:1px solid rgba(155,110,207,.3);color:var(--pl);padding:7px 14px;border-radius:20px;font-size:13px;cursor:pointer;transition:.2s;white-space:nowrap}
+.hbtn:hover{background:rgba(155,110,207,.2)}
+.hbtn.rd{background:rgba(212,96,122,.08);border-color:rgba(212,96,122,.3);color:var(--rose)}
+
+.cloud-status{display:flex;align-items:center;gap:6px;font-size:12px;padding:6px 12px;border-radius:20px;white-space:nowrap}
+.cloud-status.ok{color:var(--grn);border:1px solid rgba(109,191,138,.3);background:rgba(109,191,138,.08)}
+.cloud-status.err{color:var(--rose);border:1px solid rgba(212,96,122,.3);background:rgba(212,96,122,.08)}
+.cloud-status.loading{color:var(--gold);border:1px solid rgba(212,168,67,.3);background:rgba(212,168,67,.08);animation:blink 1.2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.5}}
+.cdot{width:7px;height:7px;border-radius:50%;display:inline-block;flex-shrink:0}
+.cdot-g{background:var(--grn);box-shadow:0 0 5px var(--grn)}
+.cdot-r{background:var(--rose)}
+.cdot-y{background:var(--gold);animation:blink 1s infinite}
+
+.ab{max-width:1060px;margin:0 auto;padding:24px 14px;display:flex;flex-direction:column;gap:26px}
+
+.cloud-banner{border-radius:12px;padding:14px 18px;display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.cloud-banner.ok{background:rgba(109,191,138,.06);border:1px solid rgba(109,191,138,.2)}
+.cloud-banner.err{background:rgba(212,96,122,.06);border:1px solid rgba(212,96,122,.2)}
+.cloud-banner.setup{background:rgba(212,168,67,.06);border:1px solid rgba(212,168,67,.2)}
+.cb-icon{font-size:24px;flex-shrink:0;margin-top:2px}
+.cb-t{font-family:'Dancing Script',cursive;font-size:17px;margin-bottom:3px}
+.cb-t.ok{color:var(--grn)}.cb-t.err{color:var(--rose)}.cb-t.warn{color:var(--gold)}
+.cb-d{font-size:12px;color:var(--dim);line-height:1.65}
+.cb-d code{background:rgba(155,110,207,.15);padding:1px 5px;border-radius:3px;color:var(--gl);font-size:10px}
+.cpulse{width:10px;height:10px;border-radius:50%;background:var(--grn);flex-shrink:0;margin-top:5px;animation:ps 2s ease-in-out infinite}
+@keyframes ps{0%,100%{box-shadow:0 0 0 0 rgba(109,191,138,.4)}50%{box-shadow:0 0 0 7px rgba(109,191,138,0)}}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.sc{background:var(--card);border:1px solid var(--bd);border-radius:13px;padding:16px;position:relative;overflow:hidden}
+.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--pur),var(--rose),var(--gold))}
+.sc-v{font-family:'Dancing Script',cursive;font-size:30px;color:var(--gold)}
+.sc-l{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim)}
+
+.st{font-family:'Dancing Script',cursive;font-size:23px;color:var(--gold);display:flex;align-items:center;gap:10px;margin-bottom:13px}
+.st::after{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--bd),transparent)}
+
+.tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px}
+.tab{background:var(--card);border:1px solid var(--bd);color:var(--dim);padding:6px 12px;border-radius:50px;cursor:pointer;font-size:12px;transition:.2s;display:flex;align-items:center;gap:4px}
+.tab:hover{border-color:var(--pl);color:var(--txt)}
+.tab.on{background:rgba(155,110,207,.15);border-color:var(--pur);color:var(--pl)}
+.tn{background:var(--pur);color:#fff;font-size:8px;padding:1px 4px;border-radius:8px;line-height:1.5}
+
+.up{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:20px}
+.ugrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:14px;margin-bottom:16px}
+
+.uslot{border-radius:11px;border:2px solid var(--bd);background:rgba(255,255,255,.02);transition:.3s}
+.uslot:hover{border-color:var(--pur)}
+.uslot.filled{border-color:rgba(155,110,207,.4)}
+.uslot.uploading{border-color:var(--gold);border-style:dashed;animation:blink .8s infinite}
+.uslot.dov{border-color:var(--gold);border-style:dashed;background:rgba(212,168,67,.05)}
+
+.frame-aspect{aspect-ratio:var(--ar,4/3);border-radius:9px 9px 0 0;overflow:hidden;cursor:pointer;position:relative;background:rgba(255,255,255,.02)}
+.frame-aspect img{position:absolute;width:calc(100% * var(--zoom,1));height:calc(100% * var(--zoom,1));object-fit:cover;left:50%;top:50%;transform:translate(calc(-50% + var(--ox,0) * 1px),calc(-50% + var(--oy,0) * 1px));pointer-events:none}
+.fe{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;transition:.2s}
+.fe:hover{background:rgba(155,110,207,.06)}
+.fe .ei{font-size:26px;opacity:.35}.fe .et{font-size:11px;color:var(--dim)}.fe .eh{font-size:10px;color:rgba(155,110,207,.4);margin-top:1px;text-align:center;padding:0 4px}
+
+.fov{position:absolute;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;gap:7px;opacity:0;transition:.2s;border-radius:9px 9px 0 0;flex-direction:column}
+.frame-aspect:hover .fov{opacity:1}
+.ov-row{display:flex;gap:7px}
+.ib{background:rgba(255,255,255,.18);border:none;color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:.2s}
+.ib:hover{background:rgba(255,255,255,.35)}
+.ib.d:hover{background:var(--rose)}
+
+/* Upload progress overlay */
+.upload-overlay{position:absolute;inset:0;background:rgba(13,10,15,.75);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border-radius:9px 9px 0 0}
+.upload-spinner{width:32px;height:32px;border:3px solid rgba(155,110,207,.2);border-top-color:var(--pur);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.upload-pct{font-family:'Dancing Script',cursive;font-size:16px;color:var(--pl)}
+
+.cc{padding:9px 8px 7px;display:none;flex-direction:column;gap:5px;border-top:1px solid var(--bd);background:rgba(0,0,0,.18);border-radius:0 0 9px 9px}
+.uslot.filled .cc{display:flex}
+.cc-row{display:flex;align-items:center;gap:7px}
+.cc-lbl{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--dim);width:26px;flex-shrink:0}
+.cc-sl{flex:1;-webkit-appearance:none;appearance:none;height:3px;background:var(--bd);border-radius:3px;outline:none;cursor:pointer}
+.cc-sl::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--pur);cursor:pointer}
+.cc-val{font-size:9px;color:var(--dim);width:28px;text-align:right;flex-shrink:0}
+.fit-btns{display:flex;gap:3px;flex-wrap:wrap}
+.fb2{background:rgba(255,255,255,.04);border:1px solid var(--bd);color:var(--dim);padding:3px 7px;border-radius:10px;font-size:10px;cursor:pointer;transition:.2s}
+.fb2:hover{background:rgba(155,110,207,.12);border-color:var(--pur);color:var(--pl)}
+
+.si{padding:7px 8px 6px}
+.slbl{font-size:9px;color:var(--dim);letter-spacing:1px;margin-bottom:3px;text-transform:uppercase}
+.sc2{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:7px;padding:6px 9px;font-family:'Dancing Script',cursive;font-size:13px;color:var(--txt);outline:none;transition:.2s}
+.sc2:focus{border-color:var(--pur)}
+.sc2::placeholder{color:var(--dim)}
+
+.hint{background:rgba(155,110,207,.06);border:1px solid rgba(155,110,207,.15);border-radius:9px;padding:9px 13px;font-size:12px;color:var(--dim);line-height:1.7;margin-bottom:12px}
+.hint strong{color:var(--pl)}
+
+.qbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-top:8px;border-top:1px solid var(--bd)}
+.qlbl{font-size:11px;color:var(--dim);letter-spacing:1px}
+.qbtns{display:flex;gap:5px}
+.qb{background:rgba(255,255,255,.04);border:1px solid var(--bd);color:var(--dim);padding:5px 10px;border-radius:20px;font-size:11px;cursor:pointer;transition:.2s}
+.qb:hover,.qb.on{background:rgba(155,110,207,.12);border-color:var(--pur);color:var(--pl)}
+
+.srow{display:flex;gap:9px;align-items:flex-end;padding:11px;background:rgba(255,255,255,.02);border-radius:9px;border:1px solid var(--bd);margin-bottom:7px;flex-wrap:wrap;transition:.2s}
+.srow:hover{border-color:rgba(155,110,207,.22)}
+.srow.pl{border-color:rgba(109,191,138,.4);background:rgba(109,191,138,.04)}
+.fg{flex:1;min-width:110px}
+.fl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);display:block;margin-bottom:3px}
+.fi{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--bd);border-radius:7px;padding:8px 10px;font-size:14px;color:var(--txt);outline:none;transition:.2s}
+.fi:focus{border-color:var(--pur)}
+.st2{background:rgba(109,191,138,.1);border:1px solid rgba(109,191,138,.3);color:var(--grn);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:.2s;flex-shrink:0}
+.st2:hover{background:rgba(109,191,138,.2)}
+.sd{background:rgba(212,96,122,.08);border:1px solid rgba(212,96,122,.25);color:var(--rose);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:.2s;flex-shrink:0}
+.sd:hover{background:rgba(212,96,122,.25)}
+
+.mg{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:11px}
+.mc{background:rgba(255,255,255,.02);border:1px solid var(--bd);border-radius:11px;padding:14px}
+.mc-t{font-family:'Dancing Script',cursive;font-size:16px;color:var(--gold);margin-bottom:2px}
+.mc-p{font-size:10px;color:var(--dim);letter-spacing:1px;margin-bottom:6px}
+.mta{width:100%;background:rgba(255,255,255,.03);border:1px solid var(--bd);border-radius:7px;padding:8px 10px;font-size:13px;color:var(--txt);outline:none;resize:vertical;min-height:65px;line-height:1.75;transition:.2s}
+.mta:focus{border-color:var(--pur)}
+.mta::placeholder{color:var(--dim)}
+
+.bsm{background:rgba(155,110,207,.1);border:1px solid rgba(155,110,207,.28);color:var(--pl);padding:6px 13px;border-radius:20px;font-size:13px;cursor:pointer;transition:.2s}
+.bsm:hover{background:rgba(155,110,207,.2)}
+.fr{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+
+.mb{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:400;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:.3s;backdrop-filter:blur(6px)}
+.mb.on{opacity:1;pointer-events:all}
+.mbox{background:linear-gradient(160deg,#fdf8f2,#f2e4d0);border-radius:16px;max-width:460px;width:100%;padding:28px 24px;position:relative;transform:translateY(14px) scale(.96);transition:.35s;max-height:88vh;overflow-y:auto}
+.mb.on .mbox{transform:translateY(0) scale(1)}
+.mx{position:absolute;top:11px;right:13px;background:none;border:none;font-size:19px;cursor:pointer;color:#6b4226;opacity:.4;transition:.2s}
+.mx:hover{opacity:1}
+.mttl{font-family:'Dancing Script',cursive;font-size:24px;color:#6b4226;text-align:center;margin-bottom:16px}
+.mbtn{width:100%;padding:11px;background:#c8923a;border:none;border-radius:50px;font-family:'Dancing Script',cursive;font-size:18px;color:#fff;cursor:pointer;transition:.3s;margin-bottom:7px}
+.mbtn:hover{background:#e4ba78;transform:translateY(-2px)}
+
+.toast{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--pur);color:var(--pl);padding:10px 16px;border-radius:11px;font-size:13px;z-index:999;transform:translateY(70px);opacity:0;transition:.4s;white-space:nowrap;max-width:320px}
+.toast.on{transform:translateY(0);opacity:1}
+.toast.ok{border-color:var(--grn);color:#a8e6cf}
+.toast.err{border-color:var(--rose);color:#f0a0b0}
+.toast.w{border-color:var(--gold);color:var(--gl)}
+
+#pov{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:600;display:none;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+#pov.on{display:flex}
+#pov img{max-width:90vw;max-height:85vh;object-fit:contain;border-radius:8px}
+.pc{position:fixed;top:14px;right:18px;background:rgba(255,255,255,.1);border:none;color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center}
+.pc:hover{background:var(--rose)}
+
+@media(max-width:580px){.ab{padding:12px 8px}.ugrid{grid-template-columns:repeat(2,1fr)}.mg{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div id="login">
+  <div class="lcard">
+    <div class="lfl">🔐</div>
+    <h1>Admin Panel<br>Buku Kenangan Kita</h1>
+    <div class="lsub">Masukkan Password Admin</div>
+    <div class="liw"><span>🔑</span><input class="linput" type="password" id="pw" placeholder="••••••••"></div>
+    <button class="lbtn" onclick="login()">✦ Masuk ✦</button>
+    <div class="lerr" id="lerr"></div>
+    <div style="font-size:11px;color:var(--dim);text-align:center;line-height:1.8">
+      Password: <strong style="color:var(--gold)">kenangan2024</strong><br>
+      <span style="opacity:.6">☁️ Foto tersimpan di cloud — semua orang bisa lihat</span>
+    </div>
+  </div>
+</div>
+
+<div id="app">
+  <div class="hdr">
+    <div class="hdr-logo">📖 Admin Panel <span class="badge">Cloud ☁️</span></div>
+    <div class="hdr-r">
+      <div class="cloud-status loading" id="cstat"><span class="cdot cdot-y"></span> Menghubungkan...</div>
+      <button class="hbtn" onclick="openM('url-help')">❓ URL Lagu</button>
+      <button class="hbtn rd" onclick="doLogout()">Keluar</button>
+    </div>
+  </div>
+
+  <div class="ab">
+
+    <div class="cloud-banner setup" id="cbanner">
+      <div class="cb-icon">☁️</div>
+      <div>
+        <div class="cb-t warn">Menghubungkan ke Supabase...</div>
+        <div class="cb-d">Sedang memuat data dari cloud. Mohon tunggu sebentar.</div>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="sc"><div style="font-size:22px">📸</div><div class="sc-v" id="st-p">0</div><div class="sc-l">Foto di Cloud</div></div>
+      <div class="sc"><div style="font-size:22px">📖</div><div class="sc-v">20</div><div class="sc-l">Halaman</div></div>
+      <div class="sc"><div style="font-size:22px">🎵</div><div class="sc-v" id="st-s">0</div><div class="sc-l">Lagu</div></div>
+      <div class="sc"><div style="font-size:22px">💌</div><div class="sc-v" id="st-m">0</div><div class="sc-l">Pesan</div></div>
+      <div class="sc"><div style="font-size:22px">🌐</div><div class="sc-v" id="st-cloud">-</div><div class="sc-l">Status Cloud</div></div>
+    </div>
+
+    <!-- PHOTOS -->
+    <div>
+      <div class="st">📸 Kelola Foto — Tersimpan di Cloud</div>
+      <div class="hint">
+        💡 <strong>Upload foto</strong> → langsung tersimpan ke Supabase Cloud → <strong>semua pengunjung</strong> website bisa melihat tanpa perlu refresh atau login apapun!
+        Atur posisi dengan slider X/Y/Zoom setelah upload.
+        <div style="margin-top:6px">
+          <button class="bsm" onclick="document.getElementById('fim').click()" style="font-size:11px;padding:4px 10px">📎 Upload banyak foto sekaligus</button>
+        </div>
+      </div>
+      <div class="tabs" id="pgTabs"></div>
+      <div class="up">
+        <div class="ugrid" id="ugrid"></div>
+        <div class="qbar">
+          <span class="qlbl">KUALITAS UPLOAD:</span>
+          <div class="qbtns">
+            <button class="qb" onclick="setQ(.6,this)">Kecil 🔋</button>
+            <button class="qb on" onclick="setQ(.82,this)">Sedang ⚡</button>
+            <button class="qb" onclick="setQ(.95,this)">Besar 🎨</button>
+          </div>
+          <span style="margin-left:auto;font-size:11px;color:var(--dim)" id="pgsz"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SONGS -->
+    <div>
+      <div class="st">🎵 Daftar Lagu</div>
+      <div class="up">
+        <div id="srows"></div>
+        <div class="fr" style="margin-top:11px">
+          <button class="bsm" onclick="addSong()">+ Tambah Lagu</button>
+          <span style="font-size:11px;color:var(--dim)">Perubahan tersimpan otomatis ke cloud</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MESSAGES -->
+    <div>
+      <div class="st">💌 Pesan Per Halaman</div>
+      <div class="mg" id="mgrid"></div>
+    </div>
+
+    <!-- DANGER -->
+    <div style="background:rgba(212,96,122,.05);border:1px solid rgba(212,96,122,.18);border-radius:13px;padding:16px">
+      <div class="st" style="color:var(--rose)">⚠ Reset Data</div>
+      <div style="font-size:13px;color:var(--dim);margin-bottom:10px">Hapus SEMUA foto dari cloud dan reset pengaturan. Tidak bisa dibatalkan!</div>
+      <button class="bsm" style="background:rgba(212,96,122,.12);border-color:rgba(212,96,122,.4);color:var(--rose)" onclick="clearAll()">🗑 Hapus Semua Data Cloud</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL URL HELP -->
+<div class="mb" id="url-help">
+  <div class="mbox">
+    <button class="mx" onclick="closeM('url-help')">×</button>
+    <div class="mttl">🎵 Cara Dapat URL Lagu</div>
+    <div style="font-size:14px;color:#5a3820;line-height:1.9">
+      <strong>Google Drive:</strong><br>
+      1. Upload .mp3 ke Google Drive<br>
+      2. Klik kanan → "Dapatkan link" → "Siapapun"<br>
+      3. Ubah URL:<br>
+      <code style="background:rgba(107,66,38,.1);padding:2px 6px;border-radius:3px;font-size:11px;display:block;margin:4px 0;word-break:break-all">drive.google.com/uc?export=download&id=ID_FILE</code>
+      <br><strong>Dropbox:</strong> Ganti <code style="background:rgba(107,66,38,.1);padding:1px 5px;border-radius:3px">?dl=0</code> → <code style="background:rgba(107,66,38,.1);padding:1px 5px;border-radius:3px">?raw=1</code>
+    </div>
+    <button class="mbtn" onclick="closeM('url-help')" style="margin-top:14px">✓ Mengerti</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div id="pov"><button class="pc" onclick="closePrev()">×</button><img id="pimg" src="" alt=""></div>
+<input type="file" id="fi" accept="image/*" style="display:none" onchange="onFI(this)">
+<input type="file" id="fim" accept="image/*" multiple style="display:none" onchange="onFIM(this)">
+<audio id="ta" style="display:none"></audio>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// KONFIGURASI SUPABASE
+// ═══════════════════════════════════════════════════════════
+const SUPA_URL = 'https://aylutizwbolngnuwerzn.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF5bHV0aXp3Ym9sbmdudXdlcnpuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4MDk2MzMsImV4cCI6MjA4NzM4NTYzM30.9G99gt4WlQb8Hz_oTc3pgcp0nD8WAV2gCu4TK3ptpuQ';
+const BUCKET  = 'photos';
+const TABLE   = 'kenangan_data'; // table untuk metadata
+const PW      = 'kenangan2024';
+
+// ═══════════════════════════════════════════════════════════
+// SUPABASE HELPER
+// ═══════════════════════════════════════════════════════════
+const H = { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY, 'Content-Type': 'application/json' };
+
+async function dbGet(key) {
+  const r = await fetch(`${SUPA_URL}/rest/v1/${TABLE}?key=eq.${encodeURIComponent(key)}&select=value`, { headers: H });
+  if (!r.ok) return null;
+  const d = await r.json();
+  return d.length ? JSON.parse(d[0].value) : null;
+}
+
+async function dbSet(key, value) {
+  const body = JSON.stringify({ key, value: JSON.stringify(value) });
+  // upsert
+  const r = await fetch(`${SUPA_URL}/rest/v1/${TABLE}`, {
+    method: 'POST',
+    headers: { ...H, 'Prefer': 'resolution=merge-duplicates' },
+    body
+  });
+  return r.ok || r.status === 201 || r.status === 200;
+}
+
+async function uploadToStorage(path, blob) {
+  const r = await fetch(`${SUPA_URL}/storage/v1/object/${BUCKET}/${path}`, {
+    method: 'POST',
+    headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY, 'Content-Type': blob.type || 'image/jpeg', 'x-upsert': 'true' },
+    body: blob
+  });
+  return r.ok || r.status === 200 || r.status === 201;
+}
+
+async function deleteFromStorage(path) {
+  await fetch(`${SUPA_URL}/storage/v1/object/${BUCKET}/${path}`, {
+    method: 'DELETE',
+    headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + SUPA_KEY }
+  });
+}
+
+function storageUrl(path) {
+  return `${SUPA_URL}/storage/v1/object/public/${BUCKET}/${path}`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// SETUP — pastikan table ada
+// ═══════════════════════════════════════════════════════════
+async function ensureTable() {
+  // Coba buat table via SQL edge function (kalau ada) atau pakai REST saja
+  // Kita test dengan mencoba GET — kalau error 404/400 berarti table belum ada
+  try {
+    const r = await fetch(`${SUPA_URL}/rest/v1/${TABLE}?limit=1`, { headers: H });
+    if (r.status === 404 || r.status === 400) {
+      return false; // table tidak ada
+    }
+    return r.ok;
+  } catch(e) { return false; }
+}
+
+// ═══════════════════════════════════════════════════════════
+// PAGE DEFS
+// ═══════════════════════════════════════════════════════════
+const PGS=[
+  {t:'Permulaan Segalanya',e:'🌸',s:[{n:'Foto utama',ar:'3/4'},{n:'Foto timeline',ar:'4/3'}]},
+  {t:'Hari-Hari Kecil',e:'☕',s:[{n:'Polaroid 1',ar:'1/1'},{n:'Polaroid 2',ar:'1/1'},{n:'Polaroid 3',ar:'1/1'},{n:'Polaroid 4',ar:'1/1'}]},
+  {t:'Saat Jauh',e:'🌙',s:[{n:'Foto malam rindu',ar:'4/3'}]},
+  {t:'Petualangan Bersama',e:'🗺️',s:[{n:'Pantai',ar:'1/1'},{n:'Gunung',ar:'1/1'},{n:'Kota tua',ar:'1/1'},{n:'Petualangan',ar:'1/1'}]},
+  {t:'Kata Hati',e:'💬',s:[{n:'Foto spesial',ar:'3/4'}]},
+  {t:'Hari Spesial',e:'🎂',s:[{n:'Foto perayaan',ar:'4/3'}]},
+  {t:'Ketika Susah',e:'🤝',s:[{n:'Foto bersama',ar:'4/3'}]},
+  {t:'Momen Lucu',e:'😄',s:[{n:'Lucu 1',ar:'1/1'},{n:'Lucu 2',ar:'1/1'},{n:'Lucu 3',ar:'1/1'},{n:'Lucu 4',ar:'1/1'}]},
+  {t:'Impian Bersama',e:'🌠',s:[{n:'Foto impian',ar:'4/3'}]},
+  {t:'Terima Kasih',e:'🙏',s:[{n:'Foto terbaik',ar:'3/4'}]},
+  {t:'Bulan Madu',e:'🌹',s:[{n:'Romantis 1',ar:'1/1'},{n:'Romantis 2',ar:'1/1'},{n:'Romantis 3',ar:'1/1'},{n:'Romantis 4',ar:'1/1'}]},
+  {t:'Keluarga Kecil',e:'🏠',s:[{n:'Foto rumah',ar:'16/9'},{n:'Foto bersama',ar:'4/3'}]},
+  {t:'Momen Favorit',e:'⭐',s:[{n:'Favorit 1',ar:'1/1'},{n:'Favorit 2',ar:'1/1'},{n:'Favorit 3',ar:'1/1'},{n:'Favorit 4',ar:'1/1'}]},
+  {t:'Perjalanan Jauh',e:'✈️',s:[{n:'Perjalanan 1',ar:'1/1'},{n:'Perjalanan 2',ar:'1/1'},{n:'Perjalanan 3',ar:'1/1'},{n:'Perjalanan 4',ar:'1/1'}]},
+  {t:'Ulang Tahun',e:'🎉',s:[{n:'Foto HBD',ar:'4/3'}]},
+  {t:'Malam Bintang',e:'🌌',s:[{n:'Foto malam',ar:'4/3'}]},
+  {t:'Hujan Bersamamu',e:'🌧️',s:[{n:'Foto hujan',ar:'3/4'}]},
+  {t:'Akhir Minggu',e:'🌻',s:[{n:'Weekend 1',ar:'1/1'},{n:'Weekend 2',ar:'1/1'},{n:'Weekend 3',ar:'1/1'},{n:'Weekend 4',ar:'1/1'}]},
+  {t:'Janji Kita',e:'💍',s:[{n:'Foto janji',ar:'3/4'}]},
+  {t:'Selamanya',e:'♾️',s:[{n:'Kenangan 1',ar:'1/1'},{n:'Kenangan 2',ar:'1/1'},{n:'Kenangan 3',ar:'1/1'},{n:'Kenangan 4',ar:'1/1'}]},
+];
+
+// STATE — metadata foto (url cloud, caption, ox, oy, zoom)
+// D.photos[pageIndex][slotIndex] = { url, caption, ox, oy, zoom } | null
+let D = { photos:{}, messages:{}, songs:[
+  {name:'Melodi Rindu — Ambient Piano', url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'},
+  {name:'Kenangan Abadi — Soft Guitar',  url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3'},
+  {name:'Cinta Kita — Instrumental',     url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3'},
+  {name:'Malam Bersamamu — Piano',       url:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3'},
+]};
+
+let curTab=0, pendSlot=null, jpgQ=.82, tsi=-1, cloudOk=false, saveMsgTimer=null;
+
+// ═══════════════════════════════════════════════════════════
+// LOGIN
+// ═══════════════════════════════════════════════════════════
+function login() {
+  const v = document.getElementById('pw').value;
+  if (v === PW) {
+    const l = document.getElementById('login');
+    l.style.transition = 'opacity .6s,transform .6s';
+    l.style.opacity='0'; l.style.transform='scale(1.04)';
+    setTimeout(()=>{ l.style.display='none'; document.getElementById('app').style.display='block'; initCloud(); }, 600);
+  } else {
+    document.getElementById('lerr').textContent='✕ Password salah!';
+    document.getElementById('pw').value='';
+    setTimeout(()=>document.getElementById('lerr').textContent='',3000);
+  }
+}
+function doLogout(){
+  document.getElementById('app').style.display='none';
+  const l=document.getElementById('login'); l.style.display='flex'; l.style.opacity='1'; l.style.transform='scale(1)';
+  document.getElementById('pw').value='';
+}
+document.getElementById('pw').addEventListener('keydown',e=>{ if(e.key==='Enter') login(); });
+
+// ═══════════════════════════════════════════════════════════
+// CLOUD INIT
+// ═══════════════════════════════════════════════════════════
+async function initCloud() {
+  setCloudStatus('loading','Menghubungkan ke Supabase...');
+  try {
+    const ok = await ensureTable();
+    if (!ok) {
+      setCloudStatus('err','Table belum dibuat! Baca petunjuk setup.');
+      showSetupBanner();
+      return;
+    }
+    // Load data dari cloud
+    const meta = await dbGet('metadata');
+    if (meta) {
+      if (meta.songs && meta.songs.length) D.songs = meta.songs;
+      if (meta.messages) D.messages = meta.messages;
+      if (meta.photos) D.photos = meta.photos;
+    }
+    cloudOk = true;
+    setCloudStatus('ok','Terhubung ke Cloud ☁️');
+    showOkBanner();
+    buildTabs(); renderGrid(0); buildSongs(); buildMsgs(); updateStats();
+  } catch(e) {
+    console.error(e);
+    setCloudStatus('err','Gagal terhubung: ' + e.message);
+    showErrBanner(e.message);
+  }
+}
+
+function setCloudStatus(type, text) {
+  const el = document.getElementById('cstat');
+  const dotClass = type==='ok'?'cdot-g':type==='err'?'cdot-r':'cdot-y';
+  el.className = 'cloud-status ' + type;
+  el.innerHTML = `<span class="cdot ${dotClass}"></span> ${text}`;
+}
+
+function showOkBanner() {
+  const b = document.getElementById('cbanner');
+  b.className='cloud-banner ok';
+  b.innerHTML=`<div class="cpulse"></div><div>
+    <div class="cb-t ok">☁️ Terhubung ke Supabase!</div>
+    <div class="cb-d">Semua foto yang diupload langsung tersimpan di cloud dan bisa dilihat oleh semua pengunjung website secara real-time. Tidak perlu export apapun!</div>
+  </div>`;
+}
+
+function showSetupBanner() {
+  const b = document.getElementById('cbanner');
+  b.className='cloud-banner err';
+  b.innerHTML=`<div class="cb-icon">⚠️</div><div>
+    <div class="cb-t err">Table database belum dibuat!</div>
+    <div class="cb-d">
+      Pergi ke Supabase → <strong>SQL Editor</strong> → klik <strong>New Query</strong> → paste kode ini dan klik Run:<br><br>
+      <code>CREATE TABLE IF NOT EXISTS kenangan_data (key TEXT PRIMARY KEY, value TEXT NOT NULL, updated_at TIMESTAMPTZ DEFAULT now());</code><br><br>
+      <code>ALTER TABLE kenangan_data ENABLE ROW LEVEL SECURITY;</code><br><br>
+      <code>CREATE POLICY "Public read" ON kenangan_data FOR SELECT USING (true);</code><br><br>
+      <code>CREATE POLICY "Public write" ON kenangan_data FOR ALL USING (true) WITH CHECK (true);</code><br><br>
+      Setelah itu refresh halaman ini.
+    </div>
+  </div>`;
+}
+
+function showErrBanner(msg) {
+  const b = document.getElementById('cbanner');
+  b.className='cloud-banner err';
+  b.innerHTML=`<div class="cb-icon">❌</div><div>
+    <div class="cb-t err">Gagal terhubung ke Supabase</div>
+    <div class="cb-d">Error: ${msg}<br>Pastikan bucket <code>photos</code> sudah dibuat dan bersifat <strong>Public</strong>.</div>
+  </div>`;
+}
+
+function updateStats() {
+  let pc=0;
+  Object.values(D.photos).forEach(a=>(a||[]).forEach(p=>{ if(p&&p.url) pc++; }));
+  document.getElementById('st-p').textContent = pc;
+  document.getElementById('st-s').textContent = D.songs.length;
+  document.getElementById('st-m').textContent = Object.values(D.messages).filter(v=>v&&v.trim()).length;
+  document.getElementById('st-cloud').textContent = cloudOk ? 'Online' : 'Offline';
+}
+
+// ═══════════════════════════════════════════════════════════
+// SAVE METADATA ke cloud
+// ═══════════════════════════════════════════════════════════
+async function saveMeta() {
+  if (!cloudOk) return;
+  try {
+    await dbSet('metadata', { photos: D.photos, messages: D.messages, songs: D.songs });
+    updateStats();
+  } catch(e) {
+    toast('⚠ Gagal simpan metadata: ' + e.message, 4, 'err');
+  }
+}
+
+function scheduleSave() {
+  clearTimeout(saveMsgTimer);
+  saveMsgTimer = setTimeout(saveMeta, 1500);
+}
+
+// ═══════════════════════════════════════════════════════════
+// TABS
+// ═══════════════════════════════════════════════════════════
+function buildTabs() {
+  document.getElementById('pgTabs').innerHTML = PGS.map((p,i)=>{
+    const f=(D.photos[i]||[]).filter(x=>x&&x.url).length;
+    return `<button class="tab${i===0?' on':''}" onclick="switchTab(${i})">
+      ${p.e} <span style="max-width:66px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block">${p.t}</span>
+      ${f?`<span class="tn">${f}/${p.s.length}</span>`:''}
+    </button>`;
+  }).join('');
+}
+
+function switchTab(i) {
+  curTab=i;
+  document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('on',j===i));
+  renderGrid(i);
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER GRID
+// ═══════════════════════════════════════════════════════════
+function renderGrid(pi) {
+  const def=PGS[pi];
+  const photos=D.photos[pi]||[];
+
+  document.getElementById('ugrid').innerHTML = def.s.map((slot,si)=>{
+    const p=photos[si];
+    const ox=p?.ox||0, oy=p?.oy||0, zoom=p?.zoom||1;
+    const hasPhoto = p && p.url;
+
+    return `<div class="uslot${hasPhoto?' filled':''}" id="us-${pi}-${si}">
+      <div class="frame-aspect" style="--ar:${slot.ar};--ox:${ox};--oy:${oy};--zoom:${zoom}"
+        id="fa-${pi}-${si}" onclick="${hasPhoto?'':'doUpload('+pi+','+si+')'}">
+        ${hasPhoto
+          ? `<img src="${p.url}?t=${Date.now()}" alt="" loading="lazy" id="img-${pi}-${si}" onerror="this.src='${p.url}'">`
+          : `<div class="fe"><div class="ei">📷</div><div class="et">Klik / drag foto</div><div class="eh">${slot.n}<br><span style="opacity:.5;font-size:9px">Rasio ${slot.ar}</span></div></div>`
+        }
+        ${hasPhoto?`<div class="fov">
+          <div class="ov-row">
+            <button class="ib" onclick="event.stopPropagation();doUpload(${pi},${si})" title="Ganti foto">✏</button>
+            <button class="ib" onclick="event.stopPropagation();showPrev('${p.url}')" title="Lihat">👁</button>
+            <button class="ib d" onclick="event.stopPropagation();delPhoto(${pi},${si})" title="Hapus">✕</button>
+          </div>
+        </div>`:''}
+      </div>
+      ${hasPhoto?`<div class="cc" id="cc-${pi}-${si}">
+        <div class="cc-row"><span class="cc-lbl">X</span>
+          <input type="range" class="cc-sl" min="-200" max="200" value="${ox}"
+            oninput="livePos(${pi},${si},'ox',+this.value);document.getElementById('vx-${pi}-${si}').textContent=this.value"
+            onchange="savePos(${pi},${si})">
+          <span class="cc-val" id="vx-${pi}-${si}">${ox}</span></div>
+        <div class="cc-row"><span class="cc-lbl">Y</span>
+          <input type="range" class="cc-sl" min="-200" max="200" value="${oy}"
+            oninput="livePos(${pi},${si},'oy',+this.value);document.getElementById('vy-${pi}-${si}').textContent=this.value"
+            onchange="savePos(${pi},${si})">
+          <span class="cc-val" id="vy-${pi}-${si}">${oy}</span></div>
+        <div class="cc-row"><span class="cc-lbl">Zoom</span>
+          <input type="range" class="cc-sl" min="100" max="300" value="${Math.round(zoom*100)}"
+            oninput="livePos(${pi},${si},'zoom',this.value/100);document.getElementById('vz-${pi}-${si}').textContent=Math.round(this.value)+'%'"
+            onchange="savePos(${pi},${si})">
+          <span class="cc-val" id="vz-${pi}-${si}">${Math.round(zoom*100)}%</span></div>
+        <div class="cc-row" style="gap:3px;flex-wrap:wrap">
+          <button class="fb2" onclick="preset(${pi},${si},'face')">😊 Wajah</button>
+          <button class="fb2" onclick="preset(${pi},${si},'center')">⬛ Tengah</button>
+          <button class="fb2" onclick="preset(${pi},${si},'full')">🔲 Full</button>
+        </div>
+      </div>`:''}
+      <div class="si">
+        <div class="slbl">${slot.n}</div>
+        <input class="sc2" placeholder="✍ Keterangan foto..."
+          value="${p&&p.caption?eh(p.caption):''}"
+          onchange="updCap(${pi},${si},this.value)">
+      </div>
+    </div>`;
+  }).join('');
+
+  // Drag & drop
+  def.s.forEach((_,si)=>{
+    const el=document.getElementById(`us-${pi}-${si}`);
+    if(!el)return;
+    el.addEventListener('dragover',e=>{e.preventDefault();el.classList.add('dov');});
+    el.addEventListener('dragleave',()=>el.classList.remove('dov'));
+    el.addEventListener('drop',e=>{
+      e.preventDefault();el.classList.remove('dov');
+      const f=e.dataTransfer.files[0];
+      if(f&&f.type.startsWith('image/'))processFile(f,pi,si);
+    });
+  });
+}
+
+function eh(s){return(s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+function ea(s){return(s||'').replace(/'/g,"&#39;");}
+
+// ═══════════════════════════════════════════════════════════
+// POSITION CONTROLS
+// ═══════════════════════════════════════════════════════════
+function livePos(pi,si,key,val) {
+  const fa=document.getElementById(`fa-${pi}-${si}`);
+  if(fa) fa.style.setProperty('--'+key.replace('zoom','zoom'),key==='zoom'?val:val+'');
+  if(!D.photos[pi])D.photos[pi]=[];
+  if(D.photos[pi][si])D.photos[pi][si][key]=val;
+}
+
+function savePos(pi,si) {
+  scheduleSave();
+}
+
+function preset(pi,si,type) {
+  const p=D.photos[pi]&&D.photos[pi][si];if(!p)return;
+  const vals={face:{ox:0,oy:-50,zoom:1.4},center:{ox:0,oy:0,zoom:1},full:{ox:0,oy:0,zoom:1}};
+  const v=vals[type];
+  p.ox=v.ox;p.oy=v.oy;p.zoom=v.zoom;
+  renderGrid(pi);scheduleSave();
+  toast(`Preset "${type}" diterapkan & disimpan ✓`,2,'ok');
+}
+
+// ═══════════════════════════════════════════════════════════
+// UPLOAD — compress then push to Supabase Storage
+// ═══════════════════════════════════════════════════════════
+function doUpload(pi,si){ pendSlot={pi,si}; document.getElementById('fi').click(); }
+function onFI(inp){
+  if(!inp.files[0]||!pendSlot)return;
+  processFile(inp.files[0],pendSlot.pi,pendSlot.si);
+  inp.value='';
+}
+function onFIM(inp){
+  const files=Array.from(inp.files);
+  const def=PGS[curTab];
+  let si=0;
+  files.forEach(f=>{
+    while(si<def.s.length&&D.photos[curTab]&&D.photos[curTab][si]&&D.photos[curTab][si].url)si++;
+    if(si<def.s.length){processFile(f,curTab,si);si++;}
+  });
+  inp.value='';
+}
+
+async function processFile(file, pi, si) {
+  if(!cloudOk){toast('☁️ Tidak terhubung ke cloud!',3,'err');return;}
+
+  // Show uploading state
+  const slot=document.getElementById(`us-${pi}-${si}`);
+  if(slot){slot.classList.add('uploading');}
+  const fa=document.getElementById(`fa-${pi}-${si}`);
+  if(fa){
+    fa.innerHTML=`<div class="upload-overlay"><div class="upload-spinner"></div><div class="upload-pct">Mengompres...</div></div>`;
+  }
+
+  try {
+    // 1. Compress
+    const blob = await compressImage(file, jpgQ);
+    const kb = Math.round(blob.size/1024);
+
+    if(fa){fa.querySelector('.upload-pct').textContent=`Mengupload (${kb}KB)...`;}
+
+    // 2. Upload ke Supabase Storage
+    const path = `page-${pi}/slot-${si}-${Date.now()}.jpg`;
+    const ok = await uploadToStorage(path, blob);
+    if(!ok) throw new Error('Upload ke storage gagal');
+
+    // 3. Hapus file lama jika ada
+    if(D.photos[pi]&&D.photos[pi][si]&&D.photos[pi][si].storagePath){
+      deleteFromStorage(D.photos[pi][si].storagePath).catch(()=>{});
+    }
+
+    // 4. Simpan metadata
+    const url = storageUrl(path);
+    if(!D.photos[pi])D.photos[pi]=[];
+    while(D.photos[pi].length<=si)D.photos[pi].push(null);
+    const old=D.photos[pi][si];
+    D.photos[pi][si]={url,storagePath:path,caption:old?.caption||'',ox:0,oy:0,zoom:1};
+
+    await saveMeta();
+
+    // 5. Re-render
+    renderGrid(pi);buildTabs();
+    toast(`✓ Foto terupload ke cloud (~${kb}KB)! Semua orang bisa lihat.`,3,'ok');
+
+  } catch(e) {
+    toast('❌ Upload gagal: '+e.message,4,'err');
+    renderGrid(pi);
+  }
+  if(slot)slot.classList.remove('uploading');
+}
+
+function compressImage(file, quality) {
+  return new Promise((res,rej)=>{
+    const r=new FileReader();
+    r.onload=e=>{
+      const img=new Image();
+      img.onload=()=>{
+        const MAX=900,ratio=Math.min(MAX/img.width,MAX/img.height,1);
+        const w=Math.round(img.width*ratio),h=Math.round(img.height*ratio);
+        const c=document.createElement('canvas');c.width=w;c.height=h;
+        c.getContext('2d').drawImage(img,0,0,w,h);
+        c.toBlob(b=>b?res(b):rej(new Error('Compress gagal')),'image/jpeg',quality);
+      };
+      img.onerror=()=>rej(new Error('Gambar tidak valid'));
+      img.src=e.target.result;
+    };
+    r.onerror=()=>rej(new Error('Baca file gagal'));
+    r.readAsDataURL(file);
+  });
+}
+
+function setQ(q,btn){
+  jpgQ=q;
+  document.querySelectorAll('.qb').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
+  toast(`Kualitas upload: ${q>=.9?'Tinggi':q>=.78?'Sedang':'Rendah'}`,2,'');
+}
+
+async function updCap(pi,si,cap){
+  if(!D.photos[pi])D.photos[pi]=[];
+  while(D.photos[pi].length<=si)D.photos[pi].push(null);
+  if(D.photos[pi][si])D.photos[pi][si].caption=cap;
+  else D.photos[pi][si]={url:null,caption:cap,ox:0,oy:0,zoom:1};
+  scheduleSave();
+}
+
+async function delPhoto(pi,si){
+  if(!confirm('Hapus foto ini dari cloud?'))return;
+  const p=D.photos[pi]&&D.photos[pi][si];
+  if(p&&p.storagePath)deleteFromStorage(p.storagePath).catch(()=>{});
+  if(D.photos[pi])D.photos[pi][si]=null;
+  await saveMeta();
+  renderGrid(pi);buildTabs();updateStats();
+  toast('Foto dihapus dari cloud.',2,'w');
+}
+
+async function clearAll(){
+  if(!confirm('HAPUS SEMUA DATA CLOUD? Tidak bisa dibatalkan!'))return;
+  if(!confirm('Yakin hapus semua foto, lagu, dan pesan?'))return;
+  // Hapus semua foto dari storage (best effort)
+  Object.entries(D.photos).forEach(([,arr])=>{
+    (arr||[]).forEach(p=>{if(p&&p.storagePath)deleteFromStorage(p.storagePath).catch(()=>{});});
+  });
+  D={photos:{},messages:{},songs:[{name:'Lagu Baru',url:''}]};
+  await saveMeta();
+  buildTabs();renderGrid(0);buildSongs();buildMsgs();updateStats();
+  toast('✓ Semua data dihapus dari cloud.',3,'w');
+}
+
+// ═══════════════════════════════════════════════════════════
+// SONGS
+// ═══════════════════════════════════════════════════════════
+function buildSongs(){
+  document.getElementById('srows').innerHTML=D.songs.map((s,i)=>`
+    <div class="srow${tsi===i?' pl':''}">
+      <div class="fg"><label class="fl">🎵 Nama</label>
+        <input class="fi" value="${eh(s.name)}" oninput="D.songs[${i}].name=this.value;scheduleSave()"></div>
+      <div class="fg" style="flex:2"><label class="fl">🔗 URL Audio</label>
+        <input class="fi" value="${eh(s.url)}" oninput="D.songs[${i}].url=this.value;scheduleSave()"></div>
+      <button class="st2" onclick="testSong(${i})">${tsi===i?'⏹':'▶'}</button>
+      <button class="sd" onclick="delSong(${i})">✕</button>
+    </div>`).join('');
+  document.getElementById('st-s').textContent=D.songs.length;
+}
+
+function testSong(i){
+  const a=document.getElementById('ta');
+  if(tsi===i){a.pause();tsi=-1;buildSongs();return;}
+  a.src=D.songs[i].url;a.play().catch(()=>toast('⚠ Tidak bisa memutar URL ini',3,'err'));
+  tsi=i;buildSongs();a.onended=()=>{tsi=-1;buildSongs();};
+}
+function addSong(){D.songs.push({name:'Lagu Baru',url:''});buildSongs();scheduleSave();}
+function delSong(i){
+  if(!confirm('Hapus?'))return;
+  if(tsi===i){document.getElementById('ta').pause();tsi=-1;}
+  D.songs.splice(i,1);buildSongs();scheduleSave();
+}
+
+// ═══════════════════════════════════════════════════════════
+// MESSAGES
+// ═══════════════════════════════════════════════════════════
+function buildMsgs(){
+  document.getElementById('mgrid').innerHTML=PGS.map((p,i)=>`
+    <div class="mc">
+      <div class="mc-t">${p.e} ${p.t}</div>
+      <div class="mc-p">Hal. ${i*2+1}–${i*2+2}</div>
+      <textarea class="mta" placeholder="Edit pesan halaman ini (opsional)..."
+        oninput="D.messages[${i}]=this.value;scheduleSave()">${D.messages[i]||''}</textarea>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+// PREVIEW & MODAL
+// ═══════════════════════════════════════════════════════════
+function showPrev(src){document.getElementById('pimg').src=src;document.getElementById('pov').classList.add('on');}
+function closePrev(){document.getElementById('pov').classList.remove('on');}
+document.getElementById('pov').addEventListener('click',e=>{if(e.target===document.getElementById('pov'))closePrev();});
+function openM(id){document.getElementById(id).classList.add('on');}
+function closeM(id){document.getElementById(id).classList.remove('on');}
+document.querySelectorAll('.mb').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('on');}));
+
+// ═══════════════════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════════════════
+function toast(msg,dur=2,type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast on'+(type?' '+type:'');
+  setTimeout(()=>t.className='toast'+(type?' '+type:''),dur*1000);
+}
+</script>
+</body>
+</html>
